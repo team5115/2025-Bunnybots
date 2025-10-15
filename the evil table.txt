@@ -1,0 +1,8 @@
+Intake
+- Single wheel - Motor
+- Arm - Motor
+- Spin wheel to intake, Move arm up to trade off, Spin wheel to trade.
+
+Defacator
+- Arm - Pnumatic
+- Wait till three Lunites (Sensor? Count Variable?), Move up arm 
