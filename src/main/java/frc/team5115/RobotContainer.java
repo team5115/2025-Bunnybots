@@ -24,6 +24,10 @@ import frc.team5115.subsystems.drive.GyroIONavx;
 import frc.team5115.subsystems.drive.ModuleIO;
 import frc.team5115.subsystems.drive.ModuleIOSim;
 import frc.team5115.subsystems.drive.ModuleIOSparkMax;
+import frc.team5115.subsystems.outtake.Outtake;
+import frc.team5115.subsystems.outtake.OuttakeIO;
+import frc.team5115.subsystems.outtake.OuttakeIOReal;
+import frc.team5115.subsystems.outtake.OuttakeIOSim;
 import frc.team5115.subsystems.vision.PhotonVision;
 import frc.team5115.subsystems.vision.PhotonVisionIO;
 import frc.team5115.subsystems.vision.PhotonVisionIOReal;
@@ -43,6 +47,7 @@ public class RobotContainer {
     private final Drivetrain drivetrain;
     private final PhotonVision vision;
     private final Bling bling;
+    private final Outtake outtake;
 
     // Controllers
     private final CommandXboxController joyDrive = new CommandXboxController(0);
@@ -80,6 +85,7 @@ public class RobotContainer {
                                 new ModuleIOSparkMax(3));
                 vision = new PhotonVision(new PhotonVisionIOReal(), drivetrain);
                 bling = new Bling(new BlingIOReal());
+                outtake = new Outtake(new OuttakeIOReal(hub));
                 clearForMatchEntry =
                         Shuffleboard.getTab("SmartDashboard").add("ClearForMatch", false).getEntry();
                 break;
@@ -91,6 +97,7 @@ public class RobotContainer {
                                 gyro, new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
                 vision = new PhotonVision(new PhotonVisionIOSim(), drivetrain);
                 bling = new Bling(new BlingIOSim());
+                outtake = new Outtake(new OuttakeIOSim());
                 clearForMatchEntry = null;
                 break;
 
@@ -102,6 +109,7 @@ public class RobotContainer {
                                 gyro, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
                 vision = new PhotonVision(new PhotonVisionIO() {}, drivetrain);
                 bling = new Bling(new BlingIO() {});
+                outtake = new Outtake(new OuttakeIO() {});
                 clearForMatchEntry = null;
                 break;
         }
