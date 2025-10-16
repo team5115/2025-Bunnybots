@@ -1,7 +1,9 @@
-Intake
+Intake Wheel
 - Single wheel - Motor
-- Arm - Motor
 - Spin wheel to intake, Move arm up to trade off, Spin wheel to trade.
+
+Intake Arm
+- Arm - Motor
 
 Defacator
 - Arm - Pnumatic
