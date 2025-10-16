@@ -17,6 +17,7 @@ public class Arm extends SubsystemBase {
     private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
     private final ArmFeedforward feedforward;
     private final PIDController pid;
+    private final double ks;
 
     public Arm(ArmIO io) {
         this.io = io;
@@ -26,14 +27,17 @@ public class Arm extends SubsystemBase {
             case REPLAY:
                 feedforward = new ArmFeedforward(0.3, 0.35, 0.13509, 0.048686);
                 pid = new PIDController(0.405, 0.0, 0.0);
+                ks = 0.3;
                 break;
             case SIM:
                 feedforward = new ArmFeedforward(0.0, 0.35, 0.1351, 0.0);
                 pid = new PIDController(0.5, 0.0, 0.0);
+                ks = 0.3;
                 break;
             default:
                 feedforward = new ArmFeedforward(0.0, 0.0, 0, 0.0);
                 pid = new PIDController(0.0, 0.0, 0.0);
+                ks = 0.3;
                 break;
         }
 
@@ -57,7 +61,7 @@ public class Arm extends SubsystemBase {
         double voltage = feedforward.calculate(inputs.armAngle.getRadians(), speed);
         voltage = MathUtil.clamp(voltage, -10, +10);
 
-        if (Math.abs(voltage) < 2 * feedforward.ks) {
+        if (Math.abs(voltage) < 2 * ks) {
             voltage = 0;
         }
 

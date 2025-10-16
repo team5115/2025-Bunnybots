@@ -231,7 +231,7 @@ public class RobotContainer {
             }
             faultPrintTimeout -= 1;
             Logger.recordOutput("HasFaults", hasFaults);
-            Logger.recordOutput("ClearForMatch",!hasFaults);
+            Logger.recordOutput("ClearForMatch", !hasFaults);
         }
     }
 
