@@ -18,6 +18,8 @@ public class Arm extends SubsystemBase {
     private final ArmFeedforward feedforward;
     private final PIDController pid;
     private final double ks;
+    
+    private boolean frozen = false;
 
     public Arm(ArmIO io) {
         this.io = io;
@@ -82,7 +84,15 @@ public class Arm extends SubsystemBase {
     }
 
     public Command stow() {
-        return setAngle(Rotation2d.fromDegrees(75.0));
+        return setAngle(Rotation2d.fromDegrees(Constants.ARM_STOW_ANGLE_DEG));
+    }
+
+    public Command deploy(){
+        return setAngle(Rotation2d.fromDegrees(Constants.ARM_DEPLOY_ANGLE_DEG));
+    }
+
+    public void freeze(){
+        frozen = true;
     }
 
     public void stop() {

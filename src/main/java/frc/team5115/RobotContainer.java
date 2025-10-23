@@ -12,6 +12,10 @@ import frc.team5115.Constants.AutoConstants;
 import frc.team5115.Constants.AutoConstants.Side;
 import frc.team5115.Constants.Mode;
 import frc.team5115.commands.DriveCommands;
+import frc.team5115.subsystems.arm.Arm;
+import frc.team5115.subsystems.arm.ArmIO;
+import frc.team5115.subsystems.arm.ArmIOSim;
+import frc.team5115.subsystems.arm.ArmIOSparkMax;
 import frc.team5115.subsystems.bling.Bling;
 import frc.team5115.subsystems.bling.BlingIO;
 import frc.team5115.subsystems.bling.BlingIOReal;
@@ -22,6 +26,10 @@ import frc.team5115.subsystems.drive.GyroIONavx;
 import frc.team5115.subsystems.drive.ModuleIO;
 import frc.team5115.subsystems.drive.ModuleIOSim;
 import frc.team5115.subsystems.drive.ModuleIOSparkMax;
+import frc.team5115.subsystems.intakewheel.IntakeWheel;
+import frc.team5115.subsystems.intakewheel.IntakeWheelIO;
+import frc.team5115.subsystems.intakewheel.IntakeWheelIOSim;
+import frc.team5115.subsystems.intakewheel.IntakeWheelIOSparkMax;
 import frc.team5115.subsystems.outtake.Outtake;
 import frc.team5115.subsystems.outtake.OuttakeIO;
 import frc.team5115.subsystems.outtake.OuttakeIOReal;
@@ -46,6 +54,8 @@ public class RobotContainer {
     private final PhotonVision vision;
     private final Bling bling;
     private final Outtake outtake;
+    private final Arm arm;
+    private final IntakeWheel intakeWheel;
 
     // Controllers
     private final CommandXboxController joyDrive = new CommandXboxController(0);
@@ -59,6 +69,7 @@ public class RobotContainer {
     private boolean slowMode = false;
     private boolean hasFaults = true;
     private double faultPrintTimeout = 0;
+    private boolean intakeMode = false;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -81,6 +92,8 @@ public class RobotContainer {
                 vision = new PhotonVision(new PhotonVisionIOReal(), drivetrain);
                 bling = new Bling(new BlingIOReal());
                 outtake = new Outtake(new OuttakeIOReal(hub));
+                arm = new Arm(new ArmIOSparkMax());
+                intakeWheel = new IntakeWheel(new IntakeWheelIOSparkMax());
                 break;
             case SIM:
                 // Sim robot, instantiate physics sim IO implementations
@@ -91,6 +104,8 @@ public class RobotContainer {
                 vision = new PhotonVision(new PhotonVisionIOSim(), drivetrain);
                 bling = new Bling(new BlingIOSim());
                 outtake = new Outtake(new OuttakeIOSim());
+                arm = new Arm(new ArmIOSim());
+                intakeWheel = new IntakeWheel(new IntakeWheelIOSim());
                 break;
 
             default:
@@ -102,6 +117,8 @@ public class RobotContainer {
                 vision = new PhotonVision(new PhotonVisionIO() {}, drivetrain);
                 bling = new Bling(new BlingIO() {});
                 outtake = new Outtake(new OuttakeIO() {});
+                arm = new Arm(new ArmIO() {});
+                intakeWheel = new IntakeWheel(new IntakeWheelIO() {});
                 break;
         }
 

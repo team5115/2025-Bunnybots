@@ -4,12 +4,13 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team5115.Constants;
+
 import java.util.ArrayList;
 import java.util.function.BooleanSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class IntakeWheel extends SubsystemBase {
-    private static final double INTAKE_SPEED = 0.15;
     private final IntakeWheelIO io;
     private final IntakeWheelIOInputsAutoLogged inputs = new IntakeWheelIOInputsAutoLogged();
 
@@ -28,7 +29,7 @@ public class IntakeWheel extends SubsystemBase {
     }
 
     public Command intake() {
-        return setSpeed(INTAKE_SPEED);
+        return setSpeed(Constants.INTAKE_SPEED);
     }
 
     public Command vomit() {

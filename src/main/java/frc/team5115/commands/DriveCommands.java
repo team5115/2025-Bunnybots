@@ -8,8 +8,13 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.team5115.Constants;
 import frc.team5115.Constants.SwerveConstants;
+import frc.team5115.subsystems.arm.Arm;
 import frc.team5115.subsystems.drive.Drivetrain;
+import frc.team5115.subsystems.intakewheel.IntakeWheel;
+
+
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -68,20 +73,18 @@ public class DriveCommands {
                 drivetrain);
     }
 
-    // public static Command cleanStart(
-    //         Height height, Elevator elevator, Dealgaefacationinator5000 dealgae) {
-    //     return Commands.sequence(
-    //             elevator.setHeightAndWait(height, 5),
-    //             Commands.print("Cleaner at Height"),
-    //             Commands.waitSeconds(0.2),
-    //             elevator.waitForSetpoint(5),
-    //             dealgae.extend(),
-    //             elevator.setHeightAndWait((height == Height.L2 ? Height.CLEAN2 : Height.CLEAN3),
-    // 5));
-    // }
+    public static Command modeSwap(boolean intakeMode, IntakeWheel intakeWheel, Arm arm) {
+        return Commands.run(
+            () -> {
+                if (intakeMode) {
+                    intakeWheel.intake().execute();
+                    arm.deploy().execute();
 
-    // public static Command cleanEnd(Elevator elevator, Dealgaefacationinator5000 dealgae) {
-    //     return Commands.sequence(
-    //             dealgae.retract(), Commands.waitSeconds(0.5), elevator.setHeight(Height.INTAKE));
-    // }
+                } else {
+                    intakeWheel.stop().execute();
+                    arm.stow().execute();
+                }
+            }, 
+            intakeWheel);
+    }
 }
