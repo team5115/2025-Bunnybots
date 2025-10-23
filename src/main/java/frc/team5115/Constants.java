@@ -44,6 +44,8 @@ public final class Constants {
 
     public static final byte BLOCK_ACTUATOR_ID = 9;
 
+    public static final byte LUNITE_SENSOR = 0;
+
     public static final byte LED_STRIP_PWM_ID = 0;
 
     public static final double LOOP_PERIOD_SECS = 0.02;

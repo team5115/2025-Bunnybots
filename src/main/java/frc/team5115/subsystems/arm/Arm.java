@@ -18,8 +18,6 @@ public class Arm extends SubsystemBase {
     private final ArmFeedforward feedforward;
     private final PIDController pid;
     private final double ks;
-    
-    private boolean frozen = false;
 
     public Arm(ArmIO io) {
         this.io = io;
@@ -69,7 +67,7 @@ public class Arm extends SubsystemBase {
 
         io.setArmVoltage(voltage);
     }
-    //meow meow meow, meowwww
+    // meow meow meow, meowwww
 
     public Command waitForSetpoint(double timeout) {
         return Commands.waitUntil(() -> pid.atSetpoint()).withTimeout(timeout);
@@ -87,12 +85,12 @@ public class Arm extends SubsystemBase {
         return setAngle(Rotation2d.fromDegrees(Constants.ARM_STOW_ANGLE_DEG));
     }
 
-    public Command deploy(){
+    public Command deploy() {
         return setAngle(Rotation2d.fromDegrees(Constants.ARM_DEPLOY_ANGLE_DEG));
     }
 
-    public void freeze(){
-        frozen = true;
+    public Command waitForSensorState(boolean state, double timeout) {
+        return Commands.waitUntil(() -> inputs.luniteDetected == state).withTimeout(timeout);
     }
 
     public void stop() {

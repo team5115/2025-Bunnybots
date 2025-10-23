@@ -8,15 +8,19 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.team5115.Constants;
 import java.util.ArrayList;
 
 public class ArmIOSparkMax implements ArmIO {
     private final SparkMax motor;
-    ;
+
     private final AbsoluteEncoder absoluteEncoder;
 
+    private final DigitalInput sensor;
+
     public ArmIOSparkMax() {
+        sensor = new DigitalInput(Constants.LUNITE_SENSOR);
         motor = new SparkMax(Constants.ARM_MOTOR_ID, MotorType.kBrushless);
         absoluteEncoder = motor.getAbsoluteEncoder();
         final SparkMaxConfig motorConfig = new SparkMaxConfig();
@@ -46,5 +50,6 @@ public class ArmIOSparkMax implements ArmIO {
         }
         inputs.currentAmps = motor.getOutputCurrent();
         inputs.appliedVolts = motor.getAppliedOutput() * motor.getBusVoltage();
+        inputs.luniteDetected = sensor.get();
     }
 }

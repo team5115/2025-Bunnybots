@@ -8,12 +8,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.team5115.Constants;
 import frc.team5115.Constants.SwerveConstants;
 import frc.team5115.subsystems.arm.Arm;
 import frc.team5115.subsystems.drive.Drivetrain;
 import frc.team5115.subsystems.intakewheel.IntakeWheel;
-
+import frc.team5115.subsystems.outtake.Outtake;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -74,17 +73,20 @@ public class DriveCommands {
     }
 
     public static Command modeSwap(boolean intakeMode, IntakeWheel intakeWheel, Arm arm) {
-        return Commands.run(
-            () -> {
-                if (intakeMode) {
-                    intakeWheel.intake().execute();
-                    arm.deploy().execute();
+        return Commands.either(
+                Commands.parallel(intakeWheel.intake(), arm.deploy()),
+                Commands.parallel(intakeWheel.stop(), arm.stow()),
+                () -> intakeMode);
+    }
 
-                } else {
-                    intakeWheel.stop().execute();
-                    arm.stow().execute();
-                }
-            }, 
-            intakeWheel);
+    public static Command intakeMode(IntakeWheel intakeWheel, Arm arm) {
+        return Commands.repeatingSequence(
+                Commands.parallel(intakeWheel.intake(), arm.deploy()),
+                (arm.waitForSensorState(true, Double.POSITIVE_INFINITY)),
+                arm.stow());
+    }
+
+    public static Command scoringMode(Outtake outtake) {
+        return 
     }
 }

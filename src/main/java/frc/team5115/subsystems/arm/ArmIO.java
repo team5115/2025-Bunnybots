@@ -12,6 +12,8 @@ public interface ArmIO {
         public double armVelocityRPM = 0;
         public double currentAmps = 0;
         public double appliedVolts = 0;
+
+        public boolean luniteDetected = true;
     }
 
     public default void updateInputs(ArmIOInputs inputs) {}
