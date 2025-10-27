@@ -13,7 +13,6 @@ import frc.team5115.subsystems.arm.Arm;
 import frc.team5115.subsystems.drive.Drivetrain;
 import frc.team5115.subsystems.intakewheel.IntakeWheel;
 import frc.team5115.subsystems.outtake.Outtake;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -74,19 +73,22 @@ public class DriveCommands {
 
     public static Command modeSwap(boolean intakeMode, IntakeWheel intakeWheel, Arm arm) {
         return Commands.either(
-                Commands.parallel(intakeWheel.intake(), arm.deploy()),
-                Commands.parallel(intakeWheel.stop(), arm.stow()),
+                intakeMode(),
+                scoringMode(),
                 () -> intakeMode);
     }
 
-    public static Command intakeMode(IntakeWheel intakeWheel, Arm arm) {
+    public static Command intakeMode(IntakeWheel intakeWheel, Arm arm, Outtake outtake) {
         return Commands.repeatingSequence(
-                Commands.parallel(intakeWheel.intake(), arm.deploy()),
+                Commands.parallel(intakeWheel.intake(), arm.deploy(), outtake.retract(), outtake.allowExtend(false)),
                 (arm.waitForSensorState(true, Double.POSITIVE_INFINITY)),
-                arm.stow());
+                arm.stow(),
+                arm.waitForSetpoint(5.0),
+                intakeWheel.setSpeed(-1));
     }
 
-    public static Command scoringMode(Outtake outtake) {
-        return 
+    public static Command scoringMode(IntakeWheel intakeWheel, Arm arm, Outtake outtake) {
+        return Commands.sequence(
+                Commands.parallel(arm.stow(), intakeWheel.stop()), outtake.allowExtend(true));
     }
 }

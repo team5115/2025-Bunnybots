@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.Logger;
 public class Outtake extends SubsystemBase {
     private final OuttakeIO io;
     private final OuttakeIOInputsAutoLogged inputs = new OuttakeIOInputsAutoLogged();
+    public boolean canExtend;
 
     public Outtake(OuttakeIO io) {
         this.io = io;
@@ -19,11 +20,15 @@ public class Outtake extends SubsystemBase {
         Logger.processInputs(this.getName(), inputs);
     }
 
-    private Command extend() {
+    public Command extend() {
         return Commands.runOnce(() -> io.setPneumatic(true), this);
     }
 
-    private Command retract() {
+    public Command retract() {
         return Commands.runOnce(() -> io.setPneumatic(false), this);
+    }
+
+    public Command allowExtend(boolean allowExtend) {
+        return Commands.runOnce(() -> canExtend = allowExtend);
     }
 }
