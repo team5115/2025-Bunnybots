@@ -69,9 +69,8 @@ public class RobotContainer {
     private boolean slowMode = false;
     private boolean hasFaults = true;
     private double faultPrintTimeout = 0;
-    private boolean intakeMode = false;
 
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    /** The container for the robot. Contains subsystems, IO devices, and commands. */
     public RobotContainer() {
         AutoConstants.precomputeAlignmentPoses(); // Computes robot starting pose with vision
         switch (Constants.currentMode) {
@@ -284,6 +283,9 @@ public class RobotContainer {
 
     public void teleopInit() {
         drivetrain.setTeleopCurrentLimit();
+        arm.sensorTrigger
+        .onTrue(outtake.setLock(true))
+        .onFalse(Commands.sequence(Commands.waitSeconds(1), outtake.setLock(false)));
         // drivetrain.offsetGyro(Rotation2d.fromDegrees(-90));
     }
 
