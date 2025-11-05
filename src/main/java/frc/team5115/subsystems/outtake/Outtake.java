@@ -22,13 +22,7 @@ public class Outtake extends SubsystemBase {
     }
 
     public Command extend() {
-        return Commands.runOnce(
-                () -> {
-                    if (!locked || lockOverride) {
-                        io.setPneumatic(true);
-                    }
-                },
-                this);
+        return Commands.runOnce(() -> io.setPneumatic(true), this);
     }
 
     public Command retract() {
@@ -39,7 +33,12 @@ public class Outtake extends SubsystemBase {
         return Commands.runOnce(() -> locked = lock);
     }
 
+    public boolean getLocked() {
+        return locked && !lockOverride;
+    }
+
     public Command setLockOverride(boolean lockOverridee) {
         return Commands.runOnce(() -> lockOverride = lockOverridee);
     }
+
 }

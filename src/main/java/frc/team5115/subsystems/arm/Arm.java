@@ -5,11 +5,14 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.team5115.Constants;
+import frc.team5115.commands.DriveCommands;
+
 import java.util.ArrayList;
 import org.littletonrobotics.junction.Logger;
 
@@ -20,6 +23,7 @@ public class Arm extends SubsystemBase {
     private final PIDController pid;
     private final double ks;
     public final Trigger sensorTrigger;
+    private final Timer timer;
 
     public Arm(ArmIO io) {
         this.io = io;
@@ -47,6 +51,12 @@ public class Arm extends SubsystemBase {
         pid.setSetpoint(75.0);
 
         sensorTrigger = new Trigger(() -> (inputs.luniteDetected == true));
+        timer = new Timer();
+
+        sensorTrigger
+            .onTrue(Commands.runOnce(() -> timer.restart()))
+            .onFalse(Commands.runOnce(() -> 
+                { timer.stop(); timer.reset(); }));
     }
 
     public void getSparks(ArrayList<SparkMax> sparks) {
@@ -95,6 +105,14 @@ public class Arm extends SubsystemBase {
 
     public Command waitForSensorState(boolean state, double timeout) {
         return Commands.waitUntil(() -> inputs.luniteDetected == state).withTimeout(timeout);
+    }
+
+    public Trigger sensorTrigger() {
+        return new Trigger(() -> inputs.luniteDetected);
+    }
+
+    public Trigger filterTimeElapsed() {
+        return new Trigger(() -> timer.hasElapsed(Constants.SENSOR_FILTER_TIME));
     }
 
     public void stop() {

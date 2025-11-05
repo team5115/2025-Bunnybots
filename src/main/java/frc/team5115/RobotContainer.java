@@ -222,10 +222,11 @@ public class RobotContainer {
          * point up on dpad to toggle climber block
         //  * point down on dpad and press B (L2) or X (L3) to clean algae, release to stow
          */
-        joyManip.a().onTrue(outtake.extend()).onFalse(outtake.retract());
+        joyManip.a().and(() -> !outtake.getLocked()).onTrue(outtake.extend()).onFalse(outtake.retract());
         joyManip.b().onTrue(DriveCommands.vomit(arm, intakeWheel));
         joyManip.rightTrigger().onTrue(outtake.setLockOverride(true)).onFalse(outtake.setLockOverride(false));
 
+        intakeWheel.setDefaultCommand(DriveCommands.intake(arm, intakeWheel));
     }
 
     private Command setRobotRelative(boolean state) {
