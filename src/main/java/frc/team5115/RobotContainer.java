@@ -190,22 +190,22 @@ public class RobotContainer {
         joyDrive.rightBumper().onTrue(setSlowMode(true)).onFalse(setSlowMode(false));
         joyDrive.start().onTrue(offsetGyro());
 
-        joyDrive
-                .leftTrigger()
-                .and(joyDrive.rightTrigger().negate())
-                .onTrue(drivetrain.selectNearestScoringSpot(Side.LEFT))
-                .whileTrue(drivetrain.alignSelectedSpot(Side.LEFT));
-        joyDrive
-                .rightTrigger()
-                .and(joyDrive.leftTrigger().negate())
-                .onTrue(drivetrain.selectNearestScoringSpot(Side.RIGHT))
-                .whileTrue(drivetrain.alignSelectedSpot(Side.RIGHT));
+        // joyDrive
+        //         .leftTrigger()
+        //         .and(joyDrive.rightTrigger().negate())
+        //         .onTrue(drivetrain.selectNearestScoringSpot(Side.LEFT))
+        //         .whileTrue(drivetrain.alignSelectedSpot(Side.LEFT));
+        // joyDrive
+        //         .rightTrigger()
+        //         .and(joyDrive.leftTrigger().negate())
+        //         .onTrue(drivetrain.selectNearestScoringSpot(Side.RIGHT))
+        //         .whileTrue(drivetrain.alignSelectedSpot(Side.RIGHT));
 
-        joyDrive
-                .leftTrigger()
-                .and(joyDrive.rightTrigger())
-                .onTrue(drivetrain.selectNearestScoringSpot(Side.CENTER))
-                .whileTrue(drivetrain.alignSelectedSpot(Side.CENTER));
+        // joyDrive
+        //         .leftTrigger()
+        //         .and(joyDrive.rightTrigger())
+        //         .onTrue(drivetrain.selectNearestScoringSpot(Side.CENTER))
+        //         .whileTrue(drivetrain.alignSelectedSpot(Side.CENTER));
 
         /*
          * Manipulator button bindings:
@@ -222,6 +222,9 @@ public class RobotContainer {
          * point up on dpad to toggle climber block
         //  * point down on dpad and press B (L2) or X (L3) to clean algae, release to stow
          */
+        joyManip.a().onTrue(outtake.extend()).onFalse(outtake.retract());
+        joyManip.b().onTrue(DriveCommands.vomit(arm, intakeWheel));
+        joyManip.rightTrigger().onTrue(outtake.setLockOverride(true)).onFalse(outtake.setLockOverride(false));
 
     }
 
@@ -284,8 +287,8 @@ public class RobotContainer {
     public void teleopInit() {
         drivetrain.setTeleopCurrentLimit();
         arm.sensorTrigger
-        .onTrue(outtake.setLock(true))
-        .onFalse(Commands.sequence(Commands.waitSeconds(1), outtake.setLock(false)));
+                .onTrue(outtake.setLock(true))
+                .onFalse(Commands.sequence(Commands.waitSeconds(1), outtake.setLock(false)));
         // drivetrain.offsetGyro(Rotation2d.fromDegrees(-90));
     }
 

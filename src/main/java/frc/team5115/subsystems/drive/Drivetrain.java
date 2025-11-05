@@ -291,12 +291,12 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /** Drives to nearest scoring spot until all pids at goal */
-    public Command autoAlignToScoringSpot(AutoConstants.Side side) {
-        return Commands.sequence(
-                Commands.print("AutoDriving!"),
-                selectNearestScoringSpot(side),
-                alignSelectedSpot(side).until(() -> alignedAtGoal()));
-    }
+    // public Command autoAlignToScoringSpot(AutoConstants.Side side) {
+    //     return Commands.sequence(
+    //             Commands.print("AutoDriving!"),
+    //             selectNearestScoringSpot(side),
+    //             alignSelectedSpot(side).until(() -> alignedAtGoal()));
+    // }
 
     /**
      * Choose the scoring spot based on nearest scoring spot. Will also reset the pids.
@@ -304,17 +304,17 @@ public class Drivetrain extends SubsystemBase {
      * @param side the side to score on
      * @return an Instant Command
      */
-    public Command selectNearestScoringSpot(AutoConstants.Side side) {
-        return Commands.runOnce(
-                () -> {
-                    selectedPose = AutoConstants.getNearestScoringSpot(getPose(), side);
-                    final var pose = getPose();
-                    anglePid.reset(pose.getRotation().getRadians());
-                    xPid.reset(pose.getX());
-                    yPid.reset(pose.getY());
-                },
-                this);
-    }
+    // public Command selectNearestScoringSpot(AutoConstants.Side side) {
+    //     return Commands.runOnce(
+    //             () -> {
+    //                 selectedPose = AutoConstants.getNearestScoringSpot(getPose(), side);
+    //                 final var pose = getPose();
+    //                 anglePid.reset(pose.getRotation().getRadians());
+    //                 xPid.reset(pose.getX());
+    //                 yPid.reset(pose.getY());
+    //             },
+    //             this);
+    // }
 
     /**
      * Drive by auto aim pids using an already chosen `selectedPose`

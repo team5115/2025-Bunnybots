@@ -9,28 +9,28 @@ public class AutoCommands {
     private AutoCommands() {}
 
     // command for raising while aligning
-    public static Command getReefAlignCommand(Drivetrain drivetrain, Side side) {
-        return Commands.sequence(drivetrain.autoAlignToScoringSpot(side).withTimeout(2.0));
-    }
+    // public static Command getReefAlignCommand(Drivetrain drivetrain, Side side) {
+    //     return Commands.sequence(drivetrain.autoAlignToScoringSpot(side).withTimeout(2.0));
+    // }
 
-    /** Aligns left side, removes algae, and scores. */
-    public static Command cleanAndScoreLeft(Drivetrain drivetrain) {
-        return Commands.sequence(drivetrain.autoAlignToScoringSpot(Side.LEFT).withTimeout(3.0));
-    }
+    // /** Aligns left side, removes algae, and scores. */
+    // public static Command cleanAndScoreLeft(Drivetrain drivetrain) {
+    //     return Commands.sequence(drivetrain.autoAlignToScoringSpot(Side.LEFT).withTimeout(3.0));
+    // }
 
-    public static Command dealgify(Drivetrain drivetrain) {
-        return Commands.sequence(
-                Commands.print("Align"), drivetrain.autoAlignToScoringSpot(Side.CENTER).withTimeout(3.0));
-    }
+    // public static Command dealgify(Drivetrain drivetrain) {
+    //     return Commands.sequence(
+    //             Commands.print("Align"), drivetrain.autoAlignToScoringSpot(Side.CENTER).withTimeout(3.0));
+    // }
 
-    public static Command scoreSequence(Drivetrain drivetrain, Side side) {
-        return Commands.sequence(
-                Commands.print("ScoreSequence!"), drivetrain.autoAlignToScoringSpot(side));
-    }
+    // public static Command scoreSequence(Drivetrain drivetrain, Side side) {
+    //     return Commands.sequence(
+    //             Commands.print("ScoreSequence!"), drivetrain.autoAlignToScoringSpot(side));
+    // }
 
-    public static Command testingGetReefAlignCommand(Drivetrain drivetrain) {
-        return Commands.sequence(
-                // drivetrain.autoAlignToScoringSpot(side)
-                );
-    }
+    // public static Command testingGetReefAlignCommand(Drivetrain drivetrain) {
+    //     return Commands.sequence(
+    //             // drivetrain.autoAlignToScoringSpot(side)
+    //             );
+    // }
 }

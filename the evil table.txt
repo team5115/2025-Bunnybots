@@ -8,3 +8,9 @@ Intake Arm
 Defacator
 - Arm - Pnumatic
 - Wait till three Lunites (Sensor? Count Variable?), Move up arm 
+ 
+Commands for binding:
+button to score (done)
+movement (done)
+vomit on arm (done)
+override lock (press / trigger hold) (done)

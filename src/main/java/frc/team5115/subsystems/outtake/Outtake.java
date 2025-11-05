@@ -38,4 +38,8 @@ public class Outtake extends SubsystemBase {
     public Command setLock(boolean lock) {
         return Commands.runOnce(() -> locked = lock);
     }
+
+    public Command setLockOverride(boolean lockOverridee) {
+        return Commands.runOnce(() -> lockOverride = lockOverridee);
+    }
 }
