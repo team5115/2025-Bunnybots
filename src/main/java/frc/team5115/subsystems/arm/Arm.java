@@ -1,11 +1,6 @@
 package frc.team5115.subsystems.arm;
 
-import java.util.ArrayList;
-
-import org.littletonrobotics.junction.Logger;
-
 import com.revrobotics.spark.SparkMax;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -17,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.team5115.Constants;
+import java.util.ArrayList;
+import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
     private final ArmIO io;
