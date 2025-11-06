@@ -17,8 +17,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.team5115.Constants;
-import java.util.ArrayList;
-import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
     private final ArmIO io;
