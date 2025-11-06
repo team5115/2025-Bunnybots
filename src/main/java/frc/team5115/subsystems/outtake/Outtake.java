@@ -19,6 +19,9 @@ public class Outtake extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs(this.getName(), inputs);
+        Logger.recordOutput("Outtake/lockOverride", lockOverride);
+        Logger.recordOutput("Outtake/locked", locked);
+        Logger.recordOutput("Outtake/actually Locked", getLocked());
     }
 
     public Command extend() {
