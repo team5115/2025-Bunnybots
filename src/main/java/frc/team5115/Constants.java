@@ -42,7 +42,8 @@ public final class Constants {
     public static final byte INTAKE_MOTOR_ID = 12;
     public static final double INTAKE_SPEED = 0.15;
 
-    public static final byte BLOCK_ACTUATOR_ID = 9;
+    public static final byte NET_ACTUATOR_1_ID = 9;
+    public static final byte NET_ACTUATOR_2_ID = 10;
 
     public static final byte LUNITE_SENSOR = 0;
 
