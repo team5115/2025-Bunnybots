@@ -14,3 +14,9 @@ button to score (done)
 movement (done)
 vomit on arm (done)
 override lock (press / trigger hold) (done)
+
+todo:
+move controller config to DriverController.java
+AutoCommands
+sim subsystems
+arm sysid

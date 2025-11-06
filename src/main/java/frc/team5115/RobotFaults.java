@@ -3,32 +3,25 @@ package frc.team5115;
 import com.revrobotics.spark.SparkBase.Faults;
 import com.revrobotics.spark.SparkMax;
 import frc.team5115.subsystems.drive.Drivetrain;
-import frc.team5115.subsystems.vision.PhotonVision;
 import java.util.ArrayList;
 
 public class RobotFaults {
     private static final String NO_FAULTS = "No Faults";
     public final String sparkFaults;
-    public final boolean cameraDisconnected;
     public final boolean joysticksDisconnected;
     public final boolean gyroDisconnected;
     public final boolean drivetrainNull;
-    public final boolean visionNull;
     private final String cachedToString;
 
     public RobotFaults(
             String sparkFaults,
-            boolean cameraDisconnected,
             boolean joysticksDisconnected,
             boolean gyroDisconnected,
-            boolean drivetrainNull,
-            boolean visionNull) {
+            boolean drivetrainNull) {
         this.sparkFaults = sparkFaults;
-        this.cameraDisconnected = cameraDisconnected;
         this.joysticksDisconnected = joysticksDisconnected;
         this.gyroDisconnected = gyroDisconnected;
         this.drivetrainNull = drivetrainNull;
-        this.visionNull = visionNull;
         cachedToString = cacheString();
     }
 
@@ -39,9 +32,6 @@ public class RobotFaults {
             builder.append(sparkFaults);
             builder.append("] ; ");
         }
-        if (cameraDisconnected) {
-            builder.append("CameraDisconnected; ");
-        }
         if (joysticksDisconnected) {
             builder.append("JoysticksDisconnected; ");
         }
@@ -50,9 +40,6 @@ public class RobotFaults {
         }
         if (drivetrainNull) {
             builder.append("DrivetrainNull; ");
-        }
-        if (visionNull) {
-            builder.append("VisionNull; ");
         }
         if (builder.isEmpty()) {
             return NO_FAULTS;
@@ -70,8 +57,7 @@ public class RobotFaults {
         return !cachedToString.equals(NO_FAULTS);
     }
 
-    public static RobotFaults fromSubsystems(
-            Drivetrain drivetrain, PhotonVision vision, boolean joysticksConnected) {
+    public static RobotFaults fromSubsystems(Drivetrain drivetrain, boolean joysticksConnected) {
 
         ArrayList<SparkMax> sparks = new ArrayList<>();
         if (drivetrain != null) {
@@ -83,11 +69,9 @@ public class RobotFaults {
         }
         return new RobotFaults(
                 sparkFaults.toString(),
-                vision == null ? true : vision.areAnyCamerasDisconnected(),
                 !joysticksConnected,
                 drivetrain == null ? true : !drivetrain.isGyroConnected(),
-                drivetrain == null,
-                vision == null);
+                drivetrain == null);
     }
 
     private static void appendSparkFaults(StringBuilder mainBuilder, Faults faults, int id) {

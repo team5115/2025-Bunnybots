@@ -6,12 +6,9 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.team5115.Constants.AutoConstants;
-import frc.team5115.Constants.AutoConstants.Side;
 import frc.team5115.Constants.Mode;
-import frc.team5115.commands.DriveCommands;
 import frc.team5115.subsystems.arm.Arm;
 import frc.team5115.subsystems.arm.ArmIO;
 import frc.team5115.subsystems.arm.ArmIOSim;
@@ -34,10 +31,6 @@ import frc.team5115.subsystems.outtake.Outtake;
 import frc.team5115.subsystems.outtake.OuttakeIO;
 import frc.team5115.subsystems.outtake.OuttakeIOReal;
 import frc.team5115.subsystems.outtake.OuttakeIOSim;
-import frc.team5115.subsystems.vision.PhotonVision;
-import frc.team5115.subsystems.vision.PhotonVisionIO;
-import frc.team5115.subsystems.vision.PhotonVisionIOReal;
-import frc.team5115.subsystems.vision.PhotonVisionIOSim;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -51,7 +44,6 @@ public class RobotContainer {
     // Subsystems
     private final GyroIO gyro;
     private final Drivetrain drivetrain;
-    private final PhotonVision vision;
     private final Bling bling;
     private final Outtake outtake;
     private final Arm arm;
@@ -69,6 +61,7 @@ public class RobotContainer {
     private boolean slowMode = false;
     private boolean hasFaults = true;
     private double faultPrintTimeout = 0;
+    private DriverController driverController;
 
     /** The container for the robot. Contains subsystems, IO devices, and commands. */
     public RobotContainer() {
@@ -88,7 +81,6 @@ public class RobotContainer {
                                 new ModuleIOSparkMax(1),
                                 new ModuleIOSparkMax(2),
                                 new ModuleIOSparkMax(3));
-                vision = new PhotonVision(new PhotonVisionIOReal(), drivetrain);
                 bling = new Bling(new BlingIOReal());
                 outtake = new Outtake(new OuttakeIOReal(hub));
                 arm = new Arm(new ArmIOSparkMax());
@@ -100,7 +92,6 @@ public class RobotContainer {
                 drivetrain =
                         new Drivetrain(
                                 gyro, new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
-                vision = new PhotonVision(new PhotonVisionIOSim(), drivetrain);
                 bling = new Bling(new BlingIOSim());
                 outtake = new Outtake(new OuttakeIOSim());
                 arm = new Arm(new ArmIOSim());
@@ -113,7 +104,6 @@ public class RobotContainer {
                 drivetrain =
                         new Drivetrain(
                                 gyro, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
-                vision = new PhotonVision(new PhotonVisionIO() {}, drivetrain);
                 bling = new Bling(new BlingIO() {});
                 outtake = new Outtake(new OuttakeIO() {});
                 arm = new Arm(new ArmIO() {});
@@ -122,7 +112,7 @@ public class RobotContainer {
         }
 
         // Register auto commands for pathplanner
-        registerCommands(drivetrain, vision);
+        registerCommands(drivetrain);
 
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -154,87 +144,8 @@ public class RobotContainer {
 
         autoChooser.addOption("Drive All SysIds", drivetrain.driveAllSysIds());
 
-        configureButtonBindings();
-        configureBlingBindings();
-    }
-
-    private void configureBlingBindings() {
-        bling.setDefaultCommand(bling.redKITT().ignoringDisable(true));
-        drivetrain.aligningToGoal().whileTrue(bling.yellowScrollIn());
-        drivetrain.alignedAtGoalTrigger().whileTrue(bling.whiteScrollIn());
-        new Trigger(() -> hasFaults).whileTrue(bling.faultFlash().ignoringDisable(true));
-    }
-
-    private void configureButtonBindings() {
-        // drive control
-        drivetrain.setDefaultCommand(
-                DriveCommands.joystickDrive(
-                        drivetrain,
-                        () -> robotRelative,
-                        () -> slowMode,
-                        () -> -joyDrive.getLeftY(),
-                        () -> -joyDrive.getLeftX(),
-                        () -> -joyDrive.getRightX()));
-
-        /* Drive button bindings -
-         * x: forces the robot to stop moving
-         * left bumper: Sets robot relative to true while held down
-         * right bumper: Sets slow mode while held down
-         * left and right triggers align to score respectively
-         * both triggers aligns to the middle
-         * start resets field orientation
-         */
-
-        joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
-        joyDrive.leftBumper().onTrue(setRobotRelative(true)).onFalse(setRobotRelative(false));
-        joyDrive.rightBumper().onTrue(setSlowMode(true)).onFalse(setSlowMode(false));
-        joyDrive.start().onTrue(offsetGyro());
-
-        // joyDrive
-        //         .leftTrigger()
-        //         .and(joyDrive.rightTrigger().negate())
-        //         .onTrue(drivetrain.selectNearestScoringSpot(Side.LEFT))
-        //         .whileTrue(drivetrain.alignSelectedSpot(Side.LEFT));
-        // joyDrive
-        //         .rightTrigger()
-        //         .and(joyDrive.leftTrigger().negate())
-        //         .onTrue(drivetrain.selectNearestScoringSpot(Side.RIGHT))
-        //         .whileTrue(drivetrain.alignSelectedSpot(Side.RIGHT));
-
-        // joyDrive
-        //         .leftTrigger()
-        //         .and(joyDrive.rightTrigger())
-        //         .onTrue(drivetrain.selectNearestScoringSpot(Side.CENTER))
-        //         .whileTrue(drivetrain.alignSelectedSpot(Side.CENTER));
-
-        /*
-         * Manipulator button bindings:
-         * hold left stick and move it for elevator manual control
-         * hold start for L1
-         * hold b for L2
-         * hold x for L3
-         * press back to rezero elevator
-         * hold a to vomit
-         * hold right trigger to dispense
-         * hold left trigger to reverse dispense
-         * press right bumper to extend climb piston
-         * press left bumper to retract climb piston
-         * point up on dpad to toggle climber block
-        //  * point down on dpad and press B (L2) or X (L3) to clean algae, release to stow
-         */
-        joyManip.a().and(() -> !outtake.getLocked()).onTrue(outtake.extend()).onFalse(outtake.retract());
-        joyManip.b().onTrue(DriveCommands.vomit(arm, intakeWheel));
-        joyManip.rightTrigger().onTrue(outtake.setLockOverride(true)).onFalse(outtake.setLockOverride(false));
-
-        intakeWheel.setDefaultCommand(DriveCommands.intake(arm, intakeWheel));
-    }
-
-    private Command setRobotRelative(boolean state) {
-        return Commands.runOnce(() -> robotRelative = state);
-    }
-
-    private Command setSlowMode(boolean state) {
-        return Commands.runOnce(() -> slowMode = state);
+        driverController = new DriverController(0, drivetrain);
+        driverController.configureButtonBindings(arm, outtake, intakeWheel);
     }
 
     public void robotPeriodic() {
@@ -242,7 +153,7 @@ public class RobotContainer {
             if (faultPrintTimeout <= 0) {
                 final var faults =
                         RobotFaults.fromSubsystems(
-                                drivetrain, vision, joyDrive.isConnected() && joyManip.isConnected());
+                                drivetrain, joyDrive.isConnected() && joyManip.isConnected());
                 hasFaults = faults.hasFaults();
                 if (hasFaults) {
                     System.err.println(faults.toString());
@@ -266,7 +177,7 @@ public class RobotContainer {
      * @param dealgaefacationinator5000
      * @param climber
      */
-    public static void registerCommands(Drivetrain drivetrain, PhotonVision vision) {
+    public static void registerCommands(Drivetrain drivetrain) {
         // Register commands for pathplanner
 
         System.out.println("Registered Commands");

@@ -24,7 +24,7 @@ public class IntakeWheel extends SubsystemBase {
     }
 
     public Command setSpeed(double speed) {
-        return Commands.runOnce(() -> io.setPercent(speed));
+        return Commands.runOnce(() -> io.setPercent(speed), this);
     }
 
     public Command intake() {
