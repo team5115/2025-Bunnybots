@@ -2,7 +2,11 @@ package frc.team5115;
 
 import com.revrobotics.spark.SparkBase.Faults;
 import com.revrobotics.spark.SparkMax;
+
+import frc.team5115.subsystems.arm.Arm;
 import frc.team5115.subsystems.drive.Drivetrain;
+import frc.team5115.subsystems.intakewheel.IntakeWheel;
+
 import java.util.ArrayList;
 
 public class RobotFaults {
@@ -57,11 +61,17 @@ public class RobotFaults {
         return !cachedToString.equals(NO_FAULTS);
     }
 
-    public static RobotFaults fromSubsystems(Drivetrain drivetrain, boolean joysticksConnected) {
+    public static RobotFaults fromSubsystems(Drivetrain drivetrain, boolean joysticksConnected, IntakeWheel intakeWheel, Arm arm) {
 
         ArrayList<SparkMax> sparks = new ArrayList<>();
         if (drivetrain != null) {
             drivetrain.getSparks(sparks);
+        }
+        if (arm != null) {
+            arm.getSparks(sparks);
+        }
+        if (intakeWheel != null) {
+            intakeWheel.getSparks(sparks);
         }
         StringBuilder sparkFaults = new StringBuilder();
         for (var spark : sparks) {

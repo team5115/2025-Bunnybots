@@ -151,7 +151,7 @@ public class RobotContainer {
             if (faultPrintTimeout <= 0) {
                 final var faults =
                         RobotFaults.fromSubsystems(
-                                drivetrain, joyDrive.isConnected() && joyManip.isConnected());
+                                drivetrain, joyDrive.isConnected() && joyManip.isConnected(), intakeWheel, arm);
                 hasFaults = faults.hasFaults();
                 if (hasFaults) {
                     System.err.println(faults.toString());
