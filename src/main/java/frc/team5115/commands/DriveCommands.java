@@ -13,7 +13,6 @@ import frc.team5115.subsystems.arm.Arm;
 import frc.team5115.subsystems.drive.Drivetrain;
 import frc.team5115.subsystems.intakewheel.IntakeWheel;
 import frc.team5115.subsystems.outtake.Outtake;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -83,13 +82,12 @@ public class DriveCommands {
     }
 
     public static Command intake(Arm arm, IntakeWheel intakeWheel) {
-        return Commands.sequence (
-            arm.deploy(),
-            intakeWheel.intake(),
-            arm.waitForSensorState(true, Double.POSITIVE_INFINITY));
+        return Commands.sequence(
+                arm.deploy(), intakeWheel.intake(), arm.waitForSensorState(true, Double.POSITIVE_INFINITY));
     }
 
     public static Command vomit(Arm arm, IntakeWheel intakeWheel) {
-        return Commands.sequence(arm.deploy(), arm.waitForSetpoint(Double.POSITIVE_INFINITY), intakeWheel.vomit());
+        return Commands.sequence(
+                arm.deploy(), arm.waitForSetpoint(Double.POSITIVE_INFINITY), intakeWheel.vomit());
     }
 }

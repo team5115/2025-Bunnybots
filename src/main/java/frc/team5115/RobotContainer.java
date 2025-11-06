@@ -57,8 +57,6 @@ public class RobotContainer {
     private final LoggedDashboardChooser<Command> autoChooser;
 
     // Setings
-    private boolean robotRelative = false;
-    private boolean slowMode = false;
     private boolean hasFaults = true;
     private double faultPrintTimeout = 0;
     private DriverController driverController;
@@ -190,10 +188,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return autoChooser.get();
-    }
-
-    private Command offsetGyro() {
-        return Commands.runOnce(() -> drivetrain.offsetGyro(), drivetrain).ignoringDisable(true);
     }
 
     public void teleopInit() {
