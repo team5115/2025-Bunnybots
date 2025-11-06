@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.team5115.Constants;
-import frc.team5115.commands.DriveCommands;
-
 import java.util.ArrayList;
 import org.littletonrobotics.junction.Logger;
 
@@ -54,9 +52,13 @@ public class Arm extends SubsystemBase {
         timer = new Timer();
 
         sensorTrigger
-            .onTrue(Commands.runOnce(() -> timer.restart()))
-            .onFalse(Commands.runOnce(() -> 
-                { timer.stop(); timer.reset(); }));
+                .onTrue(Commands.runOnce(() -> timer.restart()))
+                .onFalse(
+                        Commands.runOnce(
+                                () -> {
+                                    timer.stop();
+                                    timer.reset();
+                                }));
     }
 
     public void getSparks(ArrayList<SparkMax> sparks) {

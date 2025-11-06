@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.team5115.Constants.AutoConstants;
-import frc.team5115.Constants.AutoConstants.Side;
 import frc.team5115.Constants.Mode;
 import frc.team5115.commands.DriveCommands;
 import frc.team5115.subsystems.arm.Arm;
@@ -154,6 +153,8 @@ public class RobotContainer {
 
         autoChooser.addOption("Drive All SysIds", drivetrain.driveAllSysIds());
 
+        autoChooser.addOption("Arm SysId", getAutonomousCommand());
+
         configureButtonBindings();
         configureBlingBindings();
     }
@@ -222,9 +223,16 @@ public class RobotContainer {
          * point up on dpad to toggle climber block
         //  * point down on dpad and press B (L2) or X (L3) to clean algae, release to stow
          */
-        joyManip.a().and(() -> !outtake.getLocked()).onTrue(outtake.extend()).onFalse(outtake.retract());
+        joyManip
+                .a()
+                .and(() -> !outtake.getLocked())
+                .onTrue(outtake.extend())
+                .onFalse(outtake.retract());
         joyManip.b().onTrue(DriveCommands.vomit(arm, intakeWheel));
-        joyManip.rightTrigger().onTrue(outtake.setLockOverride(true)).onFalse(outtake.setLockOverride(false));
+        joyManip
+                .rightTrigger()
+                .onTrue(outtake.setLockOverride(true))
+                .onFalse(outtake.setLockOverride(false));
 
         intakeWheel.setDefaultCommand(DriveCommands.intake(arm, intakeWheel));
     }
