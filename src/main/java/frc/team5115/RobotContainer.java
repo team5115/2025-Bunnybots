@@ -140,6 +140,19 @@ public class RobotContainer {
                 "Drive Spin SysId (Dynamic Reverse)",
                 drivetrain.sysIdSpinDynamic(SysIdRoutine.Direction.kReverse));
 
+        autoChooser.addOption(
+                "Arm SysId (Quasistatic Forward)", 
+                arm.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        autoChooser.addOption(
+                "Arm SysId (Quasistatic Reverse)",
+                arm.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        autoChooser.addOption(
+                "Arm SysId (Dynamic Forward)",
+                arm.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        autoChooser.addOption(
+                "Arm SysId (Dynamic Reverse)",
+                arm.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
         autoChooser.addOption("Drive All SysIds", drivetrain.driveAllSysIds());
 
         driverController = new DriverController(0, drivetrain);

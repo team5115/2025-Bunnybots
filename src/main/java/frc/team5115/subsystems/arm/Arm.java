@@ -1,6 +1,11 @@
 package frc.team5115.subsystems.arm;
 
+import java.util.ArrayList;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.spark.SparkMax;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -10,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.team5115.Constants;
 import java.util.ArrayList;
 import org.littletonrobotics.junction.Logger;
@@ -22,6 +28,7 @@ public class Arm extends SubsystemBase {
     private final double ks;
     public final Trigger sensorTrigger;
     private final Timer timer;
+    private final SysIdRoutine sysId;
 
     public Arm(ArmIO io) {
         this.io = io;
@@ -59,6 +66,16 @@ public class Arm extends SubsystemBase {
                                     timer.stop();
                                     timer.reset();
                                 }));
+
+        sysId =
+                new SysIdRoutine(
+                        new SysIdRoutine.Config(
+                                null,
+                                null,
+                                null,
+                                (state) -> Logger.recordOutput("Arm/SysIdState", state.toString())),
+                        new SysIdRoutine.Mechanism(
+                                (voltage) -> io.setArmVoltage(voltage.magnitude()), null, this));
     }
 
     public void getSparks(ArrayList<SparkMax> sparks) {
@@ -119,5 +136,13 @@ public class Arm extends SubsystemBase {
 
     public void stop() {
         io.setArmVoltage(0);
+    }
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysId.quasistatic(direction);
+    }
+
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysId.dynamic(direction);
     }
 }
