@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.team5115.commands.DriveCommands;
 import frc.team5115.subsystems.arm.Arm;
+import frc.team5115.subsystems.catcher.Catcher;
 import frc.team5115.subsystems.drive.Drivetrain;
 import frc.team5115.subsystems.intakewheel.IntakeWheel;
 import frc.team5115.subsystems.outtake.Outtake;
@@ -35,7 +36,7 @@ public class DriverController {
     }
 
     public void configureButtonBindings(
-            Arm arm, Outtake outtake, IntakeWheel intakeWheel, Drivetrain drivetrain) {
+            Arm arm, Outtake outtake, IntakeWheel intakeWheel, Drivetrain drivetrain, Catcher catcher) {
         // drive control
         drivetrain.setDefaultCommand(
                 DriveCommands.joystickDrive(
@@ -46,9 +47,9 @@ public class DriverController {
                         () -> -joyDrive.getLeftX(),
                         () -> -joyDrive.getRightX()));
         if (joyManip == null) {
-            configureSingleMode(arm, outtake, intakeWheel, drivetrain);
+            configureSingleMode(arm, outtake, intakeWheel, drivetrain, catcher);
         } else {
-            configureDualMode(arm, outtake, intakeWheel, drivetrain);
+            configureDualMode(arm, outtake, intakeWheel, drivetrain, catcher);
         }
     }
 
@@ -69,7 +70,7 @@ public class DriverController {
     }
 
     private void configureSingleMode(
-            Arm arm, Outtake outtake, IntakeWheel intakeWheel, Drivetrain drivetrain) {
+            Arm arm, Outtake outtake, IntakeWheel intakeWheel, Drivetrain drivetrain, Catcher catcher) {
 
         // joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
         joyDrive.leftBumper().onTrue(setRobotRelative(true)).onFalse(setRobotRelative(false));
@@ -93,11 +94,14 @@ public class DriverController {
 
         joyDrive.x().onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
+        joyDrive.povUp().onTrue(catcher.extendNet());
+        joyDrive.povDown().onTrue(catcher.retractNet());
+
         intakeWheel.setDefaultCommand(DriveCommands.intake(arm, intakeWheel));
     }
 
     private void configureDualMode(
-            Arm arm, Outtake outtake, IntakeWheel intakeWheel, Drivetrain drivetrain) {
+            Arm arm, Outtake outtake, IntakeWheel intakeWheel, Drivetrain drivetrain, Catcher catcher) {
 
         joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
         joyDrive.leftBumper().onTrue(setRobotRelative(true)).onFalse(setRobotRelative(false));
@@ -120,6 +124,9 @@ public class DriverController {
                 .rightTrigger()
                 .onTrue(outtake.setLockOverride(true))
                 .onFalse(outtake.setLockOverride(false));
+
+        joyManip.povUp().onTrue(catcher.extendNet());
+        joyManip.povDown().onTrue(catcher.retractNet());
 
         intakeWheel.setDefaultCommand(DriveCommands.intake(arm, intakeWheel));
     }
