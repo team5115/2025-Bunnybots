@@ -1,6 +1,7 @@
 package frc.team5115;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -9,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.team5115.Constants.AutoConstants;
 import frc.team5115.Constants.Mode;
+import frc.team5115.commands.AutoCommands;
 import frc.team5115.subsystems.arm.Arm;
 import frc.team5115.subsystems.arm.ArmIO;
 import frc.team5115.subsystems.arm.ArmIOSim;
@@ -118,7 +120,7 @@ public class RobotContainer {
         }
 
         // Register auto commands for pathplanner
-        registerCommands(drivetrain);
+        registerCommands(drivetrain, arm, outtake, intakeWheel);
 
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -192,8 +194,12 @@ public class RobotContainer {
      * @param dealgaefacationinator5000
      * @param climber
      */
-    public static void registerCommands(Drivetrain drivetrain) {
+    public static void registerCommands(
+            Drivetrain drivetrain, Arm arm, Outtake outtake, IntakeWheel intakewheel) {
         // Register commands for pathplanner
+        NamedCommands.registerCommand("Intake", AutoCommands.intake(arm, intakewheel, outtake));
+        NamedCommands.registerCommand("Xfer", AutoCommands.xfer(arm, intakewheel, outtake));
+        NamedCommands.registerCommand("Score", AutoCommands.score(outtake));
 
         System.out.println("Registered Commands");
     }

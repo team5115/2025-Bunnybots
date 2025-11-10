@@ -23,18 +23,15 @@ public class AutoCommands {
      *      wait X seconds
      *      lower outtake
      */
-    public Command intake(Arm arm, IntakeWheel intakeWheel, Outtake outtake) {
-        return Commands.sequence(
-                arm.deploy(),
-                intakeWheel.intake(),
-                arm.waitForSensorState(true, 3),
-                arm.stow(),
-                arm.waitForSetpoint(2),
-                DriveCommands.xferLunite(outtake, arm, intakeWheel),
-                intakeWheel.stop());
+    public static Command intake(Arm arm, IntakeWheel intakeWheel, Outtake outtake) {
+        return Commands.sequence(arm.deploy(), intakeWheel.intake(), arm.waitForSensorState(true, 3));
     }
 
-    public Command score(Outtake outtake) {
+    public static Command xfer(Arm arm, IntakeWheel intakeWheel, Outtake outtake) {
+        return DriveCommands.xferLunite(outtake, arm, intakeWheel);
+    }
+
+    public static Command score(Outtake outtake) {
         return Commands.sequence(outtake.extend(), Commands.waitSeconds(2), outtake.retract());
     }
 }
