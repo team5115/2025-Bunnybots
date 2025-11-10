@@ -75,10 +75,12 @@ public class DriverController {
 
     private void configureSingleMode(Arm arm, Outtake outtake, IntakeWheel intakeWheel) {
 
-        joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
+        //joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
         joyDrive.leftBumper().onTrue(setRobotRelative(true)).onFalse(setRobotRelative(false));
         joyDrive.rightBumper().onTrue(setSlowMode(true)).onFalse(setSlowMode(false));
         joyDrive.start().onTrue(offsetGyro());
+
+        arm.filterTimeElapsed().and(() -> !outtake.isLockOverride()).onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
         joyDrive
                 .a()
@@ -91,6 +93,8 @@ public class DriverController {
                 .onTrue(outtake.setLockOverride(true))
                 .onFalse(outtake.setLockOverride(false));
 
+        joyDrive.x().onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
+
         intakeWheel.setDefaultCommand(DriveCommands.intake(arm, intakeWheel));
     }
 
@@ -100,6 +104,10 @@ public class DriverController {
         joyDrive.leftBumper().onTrue(setRobotRelative(true)).onFalse(setRobotRelative(false));
         joyDrive.rightBumper().onTrue(setSlowMode(true)).onFalse(setSlowMode(false));
         joyDrive.start().onTrue(offsetGyro());
+
+        arm.filterTimeElapsed().and(() -> !outtake.isLockOverride()).onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
+
+        joyManip.x().onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
         joyManip
                 .a()

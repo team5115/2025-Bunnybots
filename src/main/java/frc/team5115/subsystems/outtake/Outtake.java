@@ -8,8 +8,8 @@ import org.littletonrobotics.junction.Logger;
 public class Outtake extends SubsystemBase {
     private final OuttakeIO io;
     private final OuttakeIOInputsAutoLogged inputs = new OuttakeIOInputsAutoLogged();
-    public boolean locked;
-    public boolean lockOverride;
+    private boolean locked;
+    private boolean lockOverride;
 
     public Outtake(OuttakeIO io) {
         this.io = io;
@@ -38,6 +38,10 @@ public class Outtake extends SubsystemBase {
 
     public boolean getLocked() {
         return locked && !lockOverride;
+    }
+
+    public boolean isLockOverride() {
+        return lockOverride;
     }
 
     public Command setLockOverride(boolean lockOverridee) {
