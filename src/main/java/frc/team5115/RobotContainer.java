@@ -153,8 +153,8 @@ public class RobotContainer {
 
         autoChooser.addOption("Drive All SysIds", drivetrain.driveAllSysIds());
 
-        driverController = new DriverController(0, drivetrain);
-        driverController.configureButtonBindings(arm, outtake, intakeWheel);
+        driverController = new DriverController(joyDrive);
+        driverController.configureButtonBindings(arm, outtake, intakeWheel, drivetrain);
     }
 
     public void robotPeriodic() {
