@@ -75,7 +75,17 @@ public class DriveCommands {
         return Commands.sequence(
                 outtake.setLock(true),
                 arm.stow(),
-                arm.waitForSetpoint(Double.POSITIVE_INFINITY),
+                arm.waitForSetpoint(30),
+                intakeWheel.setSpeed(-1),
+                Commands.waitSeconds(1),
+                outtake.setLock(false));
+    }
+
+    public static Command xferLunite(Outtake outtake, Arm arm, IntakeWheel intakeWheel, double timeout) {
+        return Commands.sequence(
+                outtake.setLock(true),
+                arm.stow(),
+                arm.waitForSetpoint(timeout),
                 intakeWheel.setSpeed(-1),
                 Commands.waitSeconds(1),
                 outtake.setLock(false));
