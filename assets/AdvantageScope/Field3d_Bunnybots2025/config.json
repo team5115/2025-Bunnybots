@@ -1,0 +1,31 @@
+{
+    "name": "2025 Bunnybots",
+    "sourceUrl": "https://cad.onshape.com/documents/9e8ae20303b7d3755b3a5794/w/2ebbd7aea188ac01e32ae00a/e/d19cfb1c8bee2eabeaed0aa0",
+    "rotations": [
+        {
+            "axis": "x",
+            "degrees": 90
+        },
+        {
+            "axis": "z",
+            "degrees": -90
+        }
+    ],
+    "widthInches": 648,
+    "heightInches": 324,
+    "defaultOrigin": "blue",
+    "driverStations": [],
+    "gamePieces": [
+        {
+            "name": "Lunite",
+            "rotations": [
+                {
+                    "axis": "y",
+                    "degrees": 90
+                }
+            ],
+            "position": [0, 0, 0],
+            "stagedObjects": []
+        }
+    ]
+}
