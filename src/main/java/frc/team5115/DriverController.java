@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.team5115.commands.DriveCommands;
 import frc.team5115.subsystems.arm.Arm;
+import frc.team5115.subsystems.catcher.Catcher;
 import frc.team5115.subsystems.drive.Drivetrain;
 import frc.team5115.subsystems.intakewheel.IntakeWheel;
 import frc.team5115.subsystems.outtake.Outtake;
@@ -40,7 +41,8 @@ public class DriverController {
         return joyDrive.isConnected() && (joyManip == null || joyManip.isConnected());
     }
 
-    public void configureButtonBindings(Arm arm, Outtake outtake, IntakeWheel intakeWheel) {
+    public void configureButtonBindings(
+            Arm arm, Outtake outtake, IntakeWheel intakeWheel, Catcher catcher) {
         // drive control
         drivetrain.setDefaultCommand(
                 DriveCommands.joystickDrive(
@@ -51,9 +53,9 @@ public class DriverController {
                         () -> -joyDrive.getLeftX(),
                         () -> -joyDrive.getRightX()));
         if (joyManip == null) {
-            configureSingleMode(arm, outtake, intakeWheel);
+            configureSingleMode(arm, outtake, intakeWheel, catcher);
         } else {
-            configureDualMode(arm, outtake, intakeWheel);
+            configureDualMode(arm, outtake, intakeWheel, catcher);
         }
     }
 
@@ -73,14 +75,17 @@ public class DriverController {
         return slowMode;
     }
 
-    private void configureSingleMode(Arm arm, Outtake outtake, IntakeWheel intakeWheel) {
+    private void configureSingleMode(
+            Arm arm, Outtake outtake, IntakeWheel intakeWheel, Catcher catcher) {
 
-        //joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
+        // joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
         joyDrive.leftBumper().onTrue(setRobotRelative(true)).onFalse(setRobotRelative(false));
         joyDrive.rightBumper().onTrue(setSlowMode(true)).onFalse(setSlowMode(false));
         joyDrive.start().onTrue(offsetGyro());
 
-        arm.filterTimeElapsed().and(() -> !outtake.isLockOverride()).onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
+        arm.filterTimeElapsed()
+                .and(() -> !outtake.isLockOverride())
+                .onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
         joyDrive
                 .a()
@@ -95,17 +100,23 @@ public class DriverController {
 
         joyDrive.x().onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
+        joyDrive.povUp().onTrue(catcher.extendNet());
+        joyDrive.povDown().onTrue(catcher.retractNet());
+
         intakeWheel.setDefaultCommand(DriveCommands.intake(arm, intakeWheel));
     }
 
-    private void configureDualMode(Arm arm, Outtake outtake, IntakeWheel intakeWheel) {
+    private void configureDualMode(
+            Arm arm, Outtake outtake, IntakeWheel intakeWheel, Catcher catcher) {
 
         joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
         joyDrive.leftBumper().onTrue(setRobotRelative(true)).onFalse(setRobotRelative(false));
         joyDrive.rightBumper().onTrue(setSlowMode(true)).onFalse(setSlowMode(false));
         joyDrive.start().onTrue(offsetGyro());
 
-        arm.filterTimeElapsed().and(() -> !outtake.isLockOverride()).onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
+        arm.filterTimeElapsed()
+                .and(() -> !outtake.isLockOverride())
+                .onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
         joyManip.x().onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
@@ -119,6 +130,9 @@ public class DriverController {
                 .rightTrigger()
                 .onTrue(outtake.setLockOverride(true))
                 .onFalse(outtake.setLockOverride(false));
+
+        joyManip.povUp().onTrue(catcher.extendNet());
+        joyManip.povDown().onTrue(catcher.retractNet());
 
         intakeWheel.setDefaultCommand(DriveCommands.intake(arm, intakeWheel));
     }

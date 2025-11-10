@@ -17,6 +17,10 @@ import frc.team5115.subsystems.bling.Bling;
 import frc.team5115.subsystems.bling.BlingIO;
 import frc.team5115.subsystems.bling.BlingIOReal;
 import frc.team5115.subsystems.bling.BlingIOSim;
+import frc.team5115.subsystems.catcher.Catcher;
+import frc.team5115.subsystems.catcher.CatcherIO;
+import frc.team5115.subsystems.catcher.CatcherIOReal;
+import frc.team5115.subsystems.catcher.CatcherIOSim;
 import frc.team5115.subsystems.drive.Drivetrain;
 import frc.team5115.subsystems.drive.GyroIO;
 import frc.team5115.subsystems.drive.GyroIONavx;
@@ -48,6 +52,7 @@ public class RobotContainer {
     private final Outtake outtake;
     private final Arm arm;
     private final IntakeWheel intakeWheel;
+    private final Catcher catcher;
 
     // Controllers
     private final CommandXboxController joyDrive = new CommandXboxController(0);
@@ -83,6 +88,7 @@ public class RobotContainer {
                 outtake = new Outtake(new OuttakeIOReal(hub));
                 arm = new Arm(new ArmIOSparkMax());
                 intakeWheel = new IntakeWheel(new IntakeWheelIOSparkMax());
+                catcher = new Catcher(new CatcherIOReal());
                 break;
             case SIM:
                 // Sim robot, instantiate physics sim IO implementations
@@ -94,6 +100,7 @@ public class RobotContainer {
                 outtake = new Outtake(new OuttakeIOSim());
                 arm = new Arm(new ArmIOSim());
                 intakeWheel = new IntakeWheel(new IntakeWheelIOSim());
+                catcher = new Catcher(new CatcherIOSim());
                 break;
 
             default:
@@ -106,6 +113,7 @@ public class RobotContainer {
                 outtake = new Outtake(new OuttakeIO() {});
                 arm = new Arm(new ArmIO() {});
                 intakeWheel = new IntakeWheel(new IntakeWheelIO() {});
+                catcher = new Catcher(new CatcherIO() {});
                 break;
         }
 
@@ -152,7 +160,7 @@ public class RobotContainer {
         autoChooser.addOption("Drive All SysIds", drivetrain.driveAllSysIds());
 
         driverController = new DriverController(0, drivetrain);
-        driverController.configureButtonBindings(arm, outtake, intakeWheel);
+        driverController.configureButtonBindings(arm, outtake, intakeWheel, catcher);
     }
 
     public void robotPeriodic() {
