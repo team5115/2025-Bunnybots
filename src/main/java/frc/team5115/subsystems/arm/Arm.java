@@ -24,6 +24,7 @@ public class Arm extends SubsystemBase {
     public final Trigger sensorTrigger;
     private final Timer timer;
     private final SysIdRoutine sysId;
+    public boolean mSensor = false;
 
     public Arm(ArmIO io) {
         this.io = io;
@@ -48,7 +49,7 @@ public class Arm extends SubsystemBase {
         }
 
         pid.setTolerance(5);
-        pid.setSetpoint(75.0);
+        pid.setSetpoint(Constants.ARM_STOW_ANGLE_DEG);
 
         sensorTrigger = new Trigger(() -> (inputs.luniteDetected == true));
         timer = new Timer();
@@ -118,7 +119,12 @@ public class Arm extends SubsystemBase {
     }
 
     public Command waitForSensorState(boolean state, double timeout) {
-        return Commands.waitUntil(() -> inputs.luniteDetected == state).withTimeout(timeout);
+        return Commands.waitUntil(() -> (inputs.luniteDetected || mSensor) == state)
+                .withTimeout(timeout);
+    }
+
+    public Command setMSensor(boolean MSensor) {
+        return Commands.runOnce(() -> mSensor = MSensor);
     }
 
     public Trigger sensorTrigger() {
