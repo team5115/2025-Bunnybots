@@ -7,7 +7,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Dispense"
+            "name": "dispense"
           }
         },
         {
@@ -23,7 +23,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": "intake"
                 }
               }
             ]
@@ -32,7 +32,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Stow"
+            "name": "xfer"
           }
         },
         {
@@ -48,7 +48,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": "intake"
                 }
               }
             ]
@@ -57,7 +57,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Stow"
+            "name": "xfer"
           }
         },
         {
@@ -69,7 +69,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Dispense"
+            "name": "dispense"
           }
         }
       ]
