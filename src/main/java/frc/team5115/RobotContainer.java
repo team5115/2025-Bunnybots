@@ -70,7 +70,6 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, IO devices, and commands. */
     public RobotContainer() {
-        AutoConstants.precomputeAlignmentPoses(); // Computes robot starting pose with vision
         switch (Constants.currentMode) {
             case REAL:
                 // Real robot, instantiate hardware IO implementations

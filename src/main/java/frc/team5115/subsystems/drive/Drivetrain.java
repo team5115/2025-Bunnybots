@@ -26,11 +26,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.team5115.Constants.AutoConstants;
 import frc.team5115.Constants.SwerveConstants;
 import frc.team5115.util.LocalADStarAK;
 import java.util.ArrayList;
-import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -270,102 +268,7 @@ public class Drivetrain extends SubsystemBase {
     public boolean isRedAlliance() {
         return DriverStation.getAlliance().orElseGet(() -> Alliance.Blue) == Alliance.Red;
     }
-
-    @AutoLogOutput(key = "AutoAlign/SelectedPose")
-    private Pose2d selectedPose = null;
-
-    @AutoLogOutput(key = "AutoAlign/Aligning?")
-    private boolean aligning = false;
-
-    @AutoLogOutput(key = "AutoAlign/AtGoal")
-    private boolean alignedAtGoal() {
-        return xPid.atGoal() && yPid.atGoal() && anglePid.atGoal();
-    }
-
-    public Trigger alignedAtGoalTrigger() {
-        return new Trigger(() -> alignedAtGoal() && aligning);
-    }
-
-    public Trigger aligningToGoal() {
-        return new Trigger(() -> aligning);
-    }
-
-    /** Drives to nearest scoring spot until all pids at goal */
-    // public Command autoAlignToScoringSpot(AutoConstants.Side side) {
-    //     return Commands.sequence(
-    //             Commands.print("AutoDriving!"),
-    //             selectNearestScoringSpot(side),
-    //             alignSelectedSpot(side).until(() -> alignedAtGoal()));
-    // }
-
-    /**
-     * Choose the scoring spot based on nearest scoring spot. Will also reset the pids.
-     *
-     * @param side the side to score on
-     * @return an Instant Command
-     */
-    // public Command selectNearestScoringSpot(AutoConstants.Side side) {
-    //     return Commands.runOnce(
-    //             () -> {
-    //                 selectedPose = AutoConstants.getNearestScoringSpot(getPose(), side);
-    //                 final var pose = getPose();
-    //                 anglePid.reset(pose.getRotation().getRadians());
-    //                 xPid.reset(pose.getX());
-    //                 yPid.reset(pose.getY());
-    //             },
-    //             this);
-    // }
-
-    /**
-     * Drive by auto aim pids using an already chosen `selectedPose`
-     *
-     * @param backupSide the side to choose a spot from if no pose is already selected
-     * @return
-     */
-    public Command alignSelectedSpot(AutoConstants.Side backupSide) {
-        return alignByPids(
-                () -> {
-                    if (selectedPose == null) {
-                        System.err.printf(
-                                "SelectedPose was found to be null! Using backup side of %s\n",
-                                backupSide.toString());
-                        selectedPose = AutoConstants.getNearestScoringSpot(getPose(), backupSide);
-                    }
-                    return selectedPose;
-                });
-    }
-
-    private Command alignByPids(Supplier<Pose2d> goalSupplier) {
-        return Commands.runEnd(
-                () -> {
-                    aligning = true;
-                    final var goalPose = goalSupplier.get();
-                    final var pose = getPose();
-                    final var omega =
-                            anglePid.calculate(
-                                    pose.getRotation().getRadians(), goalPose.getRotation().getRadians());
-                    final var xVelocity = xPid.calculate(pose.getX(), goalPose.getX());
-                    final var yVelocity = yPid.calculate(pose.getY(), goalPose.getY());
-
-                    Logger.recordOutput("AutoAlign/xVelocity", xVelocity);
-                    Logger.recordOutput("AutoAlign/yVelocity", yVelocity);
-                    Logger.recordOutput("AutoAlign/Omega", omega);
-                    Logger.recordOutput(
-                            "AutoAlign/GoalPose",
-                            new Pose2d(
-                                    new Translation2d(xPid.getGoal().position, yPid.getGoal().position),
-                                    new Rotation2d(anglePid.getGoal().position)));
-
-                    runVelocity(
-                            ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, omega, getRotation()));
-                },
-                () -> {
-                    stop();
-                    aligning = false;
-                },
-                this);
-    }
-
+    
     /**
      * Runs the drive at the desired velocity.
      *

@@ -30,10 +30,8 @@ public final class Constants {
     }
 
     public static final byte PNEUMATIC_HUB_ID = 2;
-    public static final byte CLIMB_FORWARD_CHANNEL = 0;
-    public static final byte CLIMB_REVERSE_CHANNEL = 1;
-    public static final byte DEALGAE_FORWARD_CHANNEL = 2;
-    public static final byte DEALGAE_REVERSE_CHANNEL = 3;
+    public static final byte OUTTAKE_FORWARD_CHANNEL = 9;
+    public static final byte OUTTAKE_REVERSE_CHANNEL = 10;
 
     public static final byte ARM_MOTOR_ID = 11;
     public static final double ARM_STOW_ANGLE_DEG = 75.0;
@@ -114,46 +112,6 @@ public final class Constants {
         public static final int TurningMotorCurrentLimit = 20; // amps
     }
 
-    public static class ElevatorConstants {
-        // Heights and radius in meters
-        public static final double DRUM_RADIUS = 0.05;
-        public static final double CARRIAGE_MASS_KG = 9.072; // 20 lbs
-        public static final double GEARING = 12.0; // numbers greater than 1 represent reductions
-
-        // Below conversion factor found empirically
-        public static final double METERS_PER_ROTATION =
-                0.007778940626786609 / 52.0 * 57.0 * 20.0 / GEARING * 63.0 / 62.625;
-
-        public static final int STALL_CURRENT_AMPS = 40;
-        public static final int FREE_CURRENT_AMPS = 40;
-        // Kv values for neo and neo 550
-        // Kf for closed loop velocity control is 1 / kv
-        public static final double KV_NEO = 473;
-        public static final double KV_NEO_550 = 917;
-
-        public static final double sparkP = 0.00001;
-        public static final double sparkI = 0;
-        public static final double sparkD = 0;
-
-        public static final double SLOW_PID_HEIGHT_METERS = 0.01 * 6.0;
-
-        public static final double FIRST_MAGNET_HEIGHT = 0;
-        public static final double SECOND_MAGNET_HEIGHT = 0.1637495863622731; // meters
-        public static final double THIRD_MAGNET_HEIGHT = 0.6174441447379277; // meters
-
-        public static final double MAX_VEL = 10.0; // m/s
-        public static final double MAX_ACCEL = 20.0; // m/s^2
-        public static final double KP = 3.0;
-        public static final double KI = 0;
-        public static final double KD = 0;
-        public static final double KS = 0.38176; // volts
-        public static final double KG = 0.33756; // volts
-        public static final double KV = 9.0313; // volts / m/s
-        public static final double KA = 0.44379; // volts / m/s^2
-
-        public static final double SLOW_CONSTANT = 0.5;
-    }
-
     public static class AutoConstants {
         private static final List<Pose2d> leftScoringPoses = new ArrayList<Pose2d>();
         private static final List<Pose2d> rightScoringPoses = new ArrayList<Pose2d>();
@@ -169,53 +127,6 @@ public final class Constants {
             Side(final List<Pose2d> poses) {
                 this.poses = poses;
             }
-        }
-
-        private static final double forwardOffset = 0.46; // distance from the april tag
-        private static final Transform2d transformLeft =
-                new Transform2d(new Translation2d(forwardOffset, -0.36), Rotation2d.k180deg);
-        private static final Transform2d transformRight =
-                new Transform2d(new Translation2d(forwardOffset, +0.0), Rotation2d.k180deg);
-        private static final Transform2d transformCenter =
-                new Transform2d(new Translation2d(forwardOffset, -0.25), Rotation2d.k180deg);
-
-        public static Pose2d getNearestScoringSpot(final Pose2d robot, final Side side) {
-            double shortestDistance = Double.MAX_VALUE;
-            Pose2d closestPose = null;
-            for (final Pose2d pose : side.poses) {
-                final double distance = pose.getTranslation().getDistance(robot.getTranslation());
-                if (distance < shortestDistance) {
-                    shortestDistance = distance;
-                    closestPose = pose;
-                }
-            }
-            return closestPose;
-        }
-
-        public static void precomputeAlignmentPoses() {
-            for (final AprilTag tag : VisionConstants.FIELD_LAYOUT.getTags()) {
-                if (((tag.ID >= 6 && tag.ID <= 11) || (tag.ID >= 17 && tag.ID <= 22))) {
-                    final Pose2d tagPose = tag.pose.toPose2d();
-                    leftScoringPoses.add(tagPose.transformBy(transformLeft));
-                    rightScoringPoses.add(tagPose.transformBy(transformRight));
-                    centerScoringPoses.add(tagPose.transformBy(transformCenter));
-                }
-            }
-        }
-
-        // Calculated using AndyMark april tag json combined with field cad
-        // 0.818973 is the distance from the center of the reef to the center of an edge
-        private static final Translation2d blueReefCenter =
-                new Translation2d(5.321046 - 0.818973, 4.02082);
-        private static final Translation2d redReefCenter =
-                new Translation2d(12.227306 + 0.818973, 4.02082);
-
-        public static double getReefX(boolean isRedAlliance) {
-            return isRedAlliance ? redReefCenter.getX() : blueReefCenter.getX();
-        }
-
-        public static double getReefY(boolean isRedAlliance) {
-            return isRedAlliance ? redReefCenter.getY() : blueReefCenter.getY();
         }
     }
 

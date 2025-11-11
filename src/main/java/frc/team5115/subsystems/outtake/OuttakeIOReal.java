@@ -11,7 +11,7 @@ public class OuttakeIOReal implements OuttakeIO {
     public OuttakeIOReal(PneumaticHub hub) {
         extender =
                 hub.makeDoubleSolenoid(
-                        Constants.DEALGAE_FORWARD_CHANNEL, Constants.DEALGAE_REVERSE_CHANNEL);
+                        Constants.OUTTAKE_FORWARD_CHANNEL, Constants.OUTTAKE_REVERSE_CHANNEL);
     }
 
     @Override
