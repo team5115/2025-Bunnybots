@@ -14,26 +14,20 @@ public class DriverController {
     private final CommandXboxController joyDrive;
     private final CommandXboxController joyManip;
 
-    private final Drivetrain drivetrain;
-
     private boolean robotRelative = false;
     private boolean slowMode = false;
 
-    public DriverController(int port, Drivetrain drivetrain) {
-        joyDrive = new CommandXboxController(port);
-        joyManip = null;
-
-        this.drivetrain = drivetrain;
+    public DriverController(CommandXboxController joyDrive) {
+        this.joyDrive = joyDrive;
+        this.joyManip = null;
     }
 
-    public DriverController(int drivePort, int manipPort, Drivetrain drivetrain) {
-        joyDrive = new CommandXboxController(drivePort);
-        joyManip = new CommandXboxController(manipPort);
-
-        this.drivetrain = drivetrain;
+    public DriverController(CommandXboxController joyDrive, CommandXboxController joyManip) {
+        this.joyDrive = joyDrive;
+        this.joyManip = joyManip;
     }
 
-    private Command offsetGyro() {
+    private Command offsetGyro(Drivetrain drivetrain) {
         return Commands.runOnce(() -> drivetrain.offsetGyro(), drivetrain).ignoringDisable(true);
     }
 
@@ -42,7 +36,7 @@ public class DriverController {
     }
 
     public void configureButtonBindings(
-            Arm arm, Outtake outtake, IntakeWheel intakeWheel, Catcher catcher) {
+            Arm arm, Outtake outtake, IntakeWheel intakeWheel, Drivetrain drivetrain, Catcher catcher) {
         // drive control
         drivetrain.setDefaultCommand(
                 DriveCommands.joystickDrive(
@@ -53,9 +47,9 @@ public class DriverController {
                         () -> -joyDrive.getLeftX(),
                         () -> -joyDrive.getRightX()));
         if (joyManip == null) {
-            configureSingleMode(arm, outtake, intakeWheel, catcher);
+            configureSingleMode(arm, outtake, intakeWheel, drivetrain, catcher);
         } else {
-            configureDualMode(arm, outtake, intakeWheel, catcher);
+            configureDualMode(arm, outtake, intakeWheel, drivetrain, catcher);
         }
     }
 
@@ -76,12 +70,12 @@ public class DriverController {
     }
 
     private void configureSingleMode(
-            Arm arm, Outtake outtake, IntakeWheel intakeWheel, Catcher catcher) {
+            Arm arm, Outtake outtake, IntakeWheel intakeWheel, Drivetrain drivetrain, Catcher catcher) {
 
         // joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
         joyDrive.leftBumper().onTrue(setRobotRelative(true)).onFalse(setRobotRelative(false));
         joyDrive.rightBumper().onTrue(setSlowMode(true)).onFalse(setSlowMode(false));
-        joyDrive.start().onTrue(offsetGyro());
+        joyDrive.start().onTrue(offsetGyro(drivetrain));
 
         arm.filterTimeElapsed()
                 .and(() -> !outtake.isLockOverride())
@@ -109,12 +103,12 @@ public class DriverController {
     }
 
     private void configureDualMode(
-            Arm arm, Outtake outtake, IntakeWheel intakeWheel, Catcher catcher) {
+            Arm arm, Outtake outtake, IntakeWheel intakeWheel, Drivetrain drivetrain, Catcher catcher) {
 
         joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
         joyDrive.leftBumper().onTrue(setRobotRelative(true)).onFalse(setRobotRelative(false));
         joyDrive.rightBumper().onTrue(setSlowMode(true)).onFalse(setSlowMode(false));
-        joyDrive.start().onTrue(offsetGyro());
+        joyDrive.start().onTrue(offsetGyro(drivetrain));
 
         arm.filterTimeElapsed()
                 .and(() -> !outtake.isLockOverride())
