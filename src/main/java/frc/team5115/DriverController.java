@@ -88,11 +88,11 @@ public class DriverController {
                 .onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
         joyDrive
-                .a()
+                .b()
                 .and(() -> !outtake.getLocked())
                 .onTrue(outtake.extend())
                 .onFalse(outtake.retract());
-        joyDrive.b().onTrue(DriveCommands.vomit(arm, intakeWheel));
+        joyDrive.back().onTrue(DriveCommands.vomit(arm, intakeWheel));
         joyDrive
                 .rightTrigger()
                 .onTrue(outtake.setLockOverride(true))
@@ -103,7 +103,9 @@ public class DriverController {
         joyDrive.povUp().onTrue(catcher.extendNet());
         joyDrive.povDown().onTrue(catcher.retractNet());
 
-        intakeWheel.setDefaultCommand(DriveCommands.intake(arm, intakeWheel));
+        joyDrive.a().onTrue(DriveCommands.intake(arm, intakeWheel));
+
+        joyDrive.y().onTrue(DriveCommands.stow(arm, intakeWheel));
     }
 
     private void configureDualMode(
@@ -121,11 +123,11 @@ public class DriverController {
         joyManip.x().onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
         joyManip
-                .a()
+                .b()
                 .and(() -> !outtake.getLocked())
                 .onTrue(outtake.extend())
                 .onFalse(outtake.retract());
-        joyManip.b().onTrue(DriveCommands.vomit(arm, intakeWheel));
+        joyManip.back().onTrue(DriveCommands.vomit(arm, intakeWheel));
         joyManip
                 .rightTrigger()
                 .onTrue(outtake.setLockOverride(true))
@@ -134,6 +136,8 @@ public class DriverController {
         joyManip.povUp().onTrue(catcher.extendNet());
         joyManip.povDown().onTrue(catcher.retractNet());
 
-        intakeWheel.setDefaultCommand(DriveCommands.intake(arm, intakeWheel));
+        joyManip.a().onTrue(DriveCommands.intake(arm, intakeWheel));
+
+        joyManip.y().onTrue(DriveCommands.stow(arm, intakeWheel));
     }
 }

@@ -81,16 +81,6 @@ public class DriveCommands {
                 outtake.setLock(false));
     }
 
-    public static Command xferLunite(Outtake outtake, Arm arm, IntakeWheel intakeWheel, double timeout) {
-        return Commands.sequence(
-                outtake.setLock(true),
-                arm.stow(),
-                arm.waitForSetpoint(timeout),
-                intakeWheel.setSpeed(-1),
-                Commands.waitSeconds(1),
-                outtake.setLock(false));
-    }
-
     public static Command intake(Arm arm, IntakeWheel intakeWheel) {
         return Commands.sequence(
                 arm.deploy(), intakeWheel.intake(), arm.waitForSensorState(true, Double.POSITIVE_INFINITY));
@@ -99,5 +89,9 @@ public class DriveCommands {
     public static Command vomit(Arm arm, IntakeWheel intakeWheel) {
         return Commands.sequence(
                 arm.deploy(), arm.waitForSetpoint(Double.POSITIVE_INFINITY), intakeWheel.vomit());
+    }
+
+    public static Command stow(Arm arm, IntakeWheel intakeWheel) {
+        return Commands.parallel(arm.stow(), intakeWheel.stop());
     }
 }

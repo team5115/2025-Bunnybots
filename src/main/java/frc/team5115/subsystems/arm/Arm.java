@@ -48,7 +48,7 @@ public class Arm extends SubsystemBase {
         }
 
         pid.setTolerance(5);
-        pid.setSetpoint(75.0);
+        pid.setSetpoint(Constants.ARM_STOW_ANGLE_DEG);
 
         sensorTrigger = new Trigger(() -> (inputs.luniteDetected == true));
         timer = new Timer();
