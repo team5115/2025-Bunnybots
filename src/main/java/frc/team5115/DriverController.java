@@ -100,6 +100,9 @@ public class DriverController {
         joyDrive.a().onTrue(DriveCommands.intake(arm, intakeWheel));
 
         joyDrive.y().onTrue(DriveCommands.stow(arm, intakeWheel));
+
+        joyDrive.povLeft().onTrue(arm.setMSensor(true));
+        joyDrive.povRight().onFalse(arm.setMSensor(false));
     }
 
     private void configureDualMode(
