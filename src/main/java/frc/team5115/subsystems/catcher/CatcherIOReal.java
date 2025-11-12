@@ -6,14 +6,20 @@ import frc.team5115.Constants;
 public class CatcherIOReal implements CatcherIO {
     private PWM linearActuator1;
     private PWM linearActuator2;
-    private boolean state = false;
 
     private final double RETRACTED_POS = 0.0;
     private final double EXTENDED_POS = 1.0; // adjust when we get the real robot
 
+    private boolean state;
+
     public CatcherIOReal() {
         linearActuator1 = new PWM(Constants.NET_ACTUATOR_1_ID);
         linearActuator2 = new PWM(Constants.NET_ACTUATOR_2_ID);
+    }
+
+    @Override
+    public void updateInputs(CatcherIOInputs inputs) {
+        inputs.state = state;
     }
 
     @Override
