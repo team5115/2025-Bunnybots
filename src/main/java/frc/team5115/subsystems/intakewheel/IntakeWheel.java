@@ -35,7 +35,7 @@ public class IntakeWheel extends SubsystemBase {
     }
 
     public Command xfer() {
-        return setSpeed(-Math.PI/10); // don't worry about it
+        return setSpeed(-Math.PI / 10); // don't worry about it
     }
 
     public Command stop() {

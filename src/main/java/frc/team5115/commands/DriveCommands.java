@@ -87,8 +87,7 @@ public class DriveCommands {
     }
 
     public static Command vomit(Arm arm, IntakeWheel intakeWheel) {
-        return Commands.sequence(
-                arm.deploy(), arm.waitForSetpoint(1), intakeWheel.vomit());
+        return Commands.sequence(arm.deploy(), arm.waitForSetpoint(1), intakeWheel.vomit());
     }
 
     public static Command stow(Arm arm, IntakeWheel intakeWheel) {
