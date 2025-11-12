@@ -1,16 +1,10 @@
 package frc.team5115.subsystems.catcher;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.simulation.DoubleSolenoidSim;
-
 public class CatcherIOSim implements CatcherIO {
 
-    private final DoubleSolenoidSim extenderSim;
     private boolean state = false;
 
-    public CatcherIOSim() {
-        extenderSim = new DoubleSolenoidSim(PneumaticsModuleType.REVPH, 0, 0);
-    }
+    public CatcherIOSim() {}
 
     @Override
     public void updateInputs(CatcherIOInputs inputs) {
