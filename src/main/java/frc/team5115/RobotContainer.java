@@ -5,7 +5,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.team5115.Constants.Mode;
 import frc.team5115.commands.AutoCommands;
@@ -200,9 +199,9 @@ public class RobotContainer {
 
     public void teleopInit() {
         drivetrain.setTeleopCurrentLimit();
-        arm.sensorTrigger
-                .onTrue(outtake.setLock(true))
-                .onFalse(Commands.sequence(Commands.waitSeconds(1), outtake.setLock(false)));
+        // arm.sensorTrigger
+        //         .onTrue(outtake.setLock(true))
+        //         .onFalse(Commands.sequence(Commands.waitSeconds(1), outtake.setLock(false)));
         // drivetrain.offsetGyro(Rotation2d.fromDegrees(-90));
     }
 

@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.team5115.Constants;
 import frc.team5115.Constants.SwerveConstants;
 import frc.team5115.subsystems.arm.Arm;
 import frc.team5115.subsystems.drive.Drivetrain;
@@ -57,8 +58,7 @@ public class DriveCommands {
                                     .getTranslation();
 
                     // Convert to ChassisSpeeds & send command
-                    // TODO maybe modify slow mode speed?
-                    final double multiplier = slowMode.getAsBoolean() ? 0.15 : 1.0;
+                    final double multiplier = slowMode.getAsBoolean() ? Constants.SLOW_MODE_SPEED : 1.0;
                     final double vx = linearVelocity.getX() * SwerveConstants.MAX_LINEAR_SPEED * multiplier;
                     final double vy = linearVelocity.getY() * SwerveConstants.MAX_LINEAR_SPEED * multiplier;
                     omega *= SwerveConstants.MAX_ANGULAR_SPEED * multiplier;
@@ -75,8 +75,8 @@ public class DriveCommands {
         return Commands.sequence(
                 outtake.setLock(true),
                 arm.stow(),
-                arm.waitForSetpoint(30),
-                intakeWheel.setSpeed(-1),
+                arm.waitForSetpoint(1.5),
+                intakeWheel.xfer(),
                 Commands.waitSeconds(1),
                 outtake.setLock(false));
     }
@@ -88,10 +88,10 @@ public class DriveCommands {
 
     public static Command vomit(Arm arm, IntakeWheel intakeWheel) {
         return Commands.sequence(
-                arm.deploy(), arm.waitForSetpoint(Double.POSITIVE_INFINITY), intakeWheel.vomit());
+                arm.deploy(), arm.waitForSetpoint(1), intakeWheel.vomit());
     }
 
     public static Command stow(Arm arm, IntakeWheel intakeWheel) {
-        return Commands.parallel(arm.stow(), intakeWheel.stop());
+        return Commands.parallel(arm.stow(), intakeWheel.intake());
     }
 }
