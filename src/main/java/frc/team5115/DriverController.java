@@ -17,14 +17,9 @@ public class DriverController {
     private boolean robotRelative = false;
     private boolean slowMode = false;
 
-    public DriverController(CommandXboxController joyDrive) {
-        this.joyDrive = joyDrive;
-        this.joyManip = null;
-    }
-
-    public DriverController(CommandXboxController joyDrive, CommandXboxController joyManip) {
-        this.joyDrive = joyDrive;
-        this.joyManip = joyManip;
+    public DriverController() {
+        this.joyDrive = new CommandXboxController(0);
+        this.joyManip = Constants.SINGLE_MODE ? null : new CommandXboxController(1);
     }
 
     private Command offsetGyro(Drivetrain drivetrain) {
@@ -46,7 +41,7 @@ public class DriverController {
                         () -> -joyDrive.getLeftY(),
                         () -> -joyDrive.getLeftX(),
                         () -> -joyDrive.getRightX()));
-        if (joyManip == null) {
+        if (Constants.SINGLE_MODE) {
             configureSingleMode(arm, outtake, intakeWheel, drivetrain, catcher);
         } else {
             configureDualMode(arm, outtake, intakeWheel, drivetrain, catcher);
@@ -136,5 +131,9 @@ public class DriverController {
         joyManip.a().onTrue(DriveCommands.intake(arm, intakeWheel));
 
         joyManip.y().onTrue(DriveCommands.stow(arm, intakeWheel));
+    }
+
+    public boolean joysticksConnected() {
+        return joyDrive.isConnected() && (Constants.SINGLE_MODE ? true : joyManip.isConnected());
     }
 }

@@ -1,12 +1,10 @@
 package frc.team5115;
 
 import com.pathplanner.lib.config.RobotConfig;
-import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -28,6 +26,8 @@ public final class Constants {
         /** Replaying from a log file. */
         REPLAY
     }
+
+    public static final boolean SINGLE_MODE = true;
 
     public static final byte PNEUMATIC_HUB_ID = 2;
     public static final byte OUTTAKE_FORWARD_CHANNEL = 9;

@@ -8,17 +8,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.team5115.Constants.AutoConstants;
 import frc.team5115.Constants.Mode;
 import frc.team5115.commands.AutoCommands;
 import frc.team5115.subsystems.arm.Arm;
 import frc.team5115.subsystems.arm.ArmIO;
 import frc.team5115.subsystems.arm.ArmIOSim;
 import frc.team5115.subsystems.arm.ArmIOSparkMax;
-import frc.team5115.subsystems.bling.Bling;
-import frc.team5115.subsystems.bling.BlingIO;
-import frc.team5115.subsystems.bling.BlingIOReal;
-import frc.team5115.subsystems.bling.BlingIOSim;
 import frc.team5115.subsystems.catcher.Catcher;
 import frc.team5115.subsystems.catcher.CatcherIO;
 import frc.team5115.subsystems.catcher.CatcherIOReal;
@@ -50,15 +45,10 @@ public class RobotContainer {
     // Subsystems
     private final GyroIO gyro;
     private final Drivetrain drivetrain;
-    private final Bling bling;
     private final Outtake outtake;
     private final Arm arm;
     private final IntakeWheel intakeWheel;
     private final Catcher catcher;
-
-    // Controllers
-    private final CommandXboxController joyDrive = new CommandXboxController(0);
-    private final CommandXboxController joyManip = new CommandXboxController(1);
 
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
@@ -85,7 +75,6 @@ public class RobotContainer {
                                 new ModuleIOSparkMax(1),
                                 new ModuleIOSparkMax(2),
                                 new ModuleIOSparkMax(3));
-                bling = new Bling(new BlingIOReal());
                 outtake = new Outtake(new OuttakeIOReal(hub));
                 arm = new Arm(new ArmIOSparkMax());
                 intakeWheel = new IntakeWheel(new IntakeWheelIOSparkMax());
@@ -97,7 +86,6 @@ public class RobotContainer {
                 drivetrain =
                         new Drivetrain(
                                 gyro, new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
-                bling = new Bling(new BlingIOSim());
                 outtake = new Outtake(new OuttakeIOSim());
                 arm = new Arm(new ArmIOSim());
                 intakeWheel = new IntakeWheel(new IntakeWheelIOSim());
@@ -110,7 +98,6 @@ public class RobotContainer {
                 drivetrain =
                         new Drivetrain(
                                 gyro, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
-                bling = new Bling(new BlingIO() {});
                 outtake = new Outtake(new OuttakeIO() {});
                 arm = new Arm(new ArmIO() {});
                 intakeWheel = new IntakeWheel(new IntakeWheelIO() {});
@@ -160,7 +147,7 @@ public class RobotContainer {
 
         autoChooser.addOption("Drive All SysIds", drivetrain.driveAllSysIds());
 
-        driverController = new DriverController(joyDrive);
+        driverController = new DriverController();
         driverController.configureButtonBindings(arm, outtake, intakeWheel, drivetrain, catcher);
     }
 
@@ -169,7 +156,7 @@ public class RobotContainer {
             if (faultPrintTimeout <= 0) {
                 final var faults =
                         RobotFaults.fromSubsystems(
-                                drivetrain, joyDrive.isConnected() && joyManip.isConnected(), intakeWheel, arm);
+                                drivetrain, driverController.joysticksConnected(), intakeWheel, arm);
                 hasFaults = faults.hasFaults();
                 if (hasFaults) {
                     System.err.println(faults.toString());
