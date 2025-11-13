@@ -45,7 +45,9 @@ public final class Constants {
     public static final byte NET_ACTUATOR_1_ID = 9;
     public static final byte NET_ACTUATOR_2_ID = 10;
 
-    public static final byte LUNITE_SENSOR = 0;
+    public static final byte LUNITE_SENSOR = 1;
+    public static final byte LUNITE_SENSOR2 = 2;
+    public static final byte LUNITE_SENSOR3 = 3;
 
     public static final byte LED_STRIP_PWM_ID = 0;
 

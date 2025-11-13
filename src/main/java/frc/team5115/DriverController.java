@@ -72,7 +72,7 @@ public class DriverController {
         joyDrive.rightBumper().onTrue(setSlowMode(true)).onFalse(setSlowMode(false));
         joyDrive.start().onTrue(offsetGyro(drivetrain));
 
-        arm.filterTimeElapsed()
+        arm.sensorFilter()
                 .and(() -> !outtake.isLockOverride())
                 .onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
@@ -108,7 +108,7 @@ public class DriverController {
         joyDrive.rightBumper().onTrue(setSlowMode(true)).onFalse(setSlowMode(false));
         joyDrive.start().onTrue(offsetGyro(drivetrain));
 
-        arm.filterTimeElapsed()
+        arm.sensorFilter()
                 .and(() -> !outtake.isLockOverride())
                 .onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 

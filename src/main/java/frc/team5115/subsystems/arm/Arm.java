@@ -4,8 +4,9 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,10 +22,9 @@ public class Arm extends SubsystemBase {
     private final ArmFeedforward feedforward;
     private final PIDController pid;
     private final double ks;
-    public final Trigger sensorTrigger;
-    private final Timer timer;
     private final SysIdRoutine sysId;
     public boolean mSensor = false;
+    private final Debouncer debouncer;
 
     public Arm(ArmIO io) {
         this.io = io;
@@ -51,17 +51,7 @@ public class Arm extends SubsystemBase {
         pid.setTolerance(5);
         pid.setSetpoint(Constants.ARM_STOW_ANGLE_DEG);
 
-        sensorTrigger = new Trigger(() -> (inputs.luniteDetected == true));
-        timer = new Timer();
-
-        sensorTrigger
-                .onTrue(Commands.runOnce(() -> timer.restart()))
-                .onFalse(
-                        Commands.runOnce(
-                                () -> {
-                                    timer.stop();
-                                    timer.reset();
-                                }));
+        debouncer = new Debouncer(5, DebounceType.kBoth);
 
         sysId =
                 new SysIdRoutine(
@@ -95,6 +85,8 @@ public class Arm extends SubsystemBase {
         }
 
         io.setArmVoltage(voltage);
+
+        debouncer.calculate(getSensorOutput());
     }
     // meow meow meow, meowwww
 
@@ -119,7 +111,7 @@ public class Arm extends SubsystemBase {
     }
 
     public Command waitForSensorState(boolean state, double timeout) {
-        return Commands.waitUntil(() -> (inputs.luniteDetected || mSensor) == state)
+        return Commands.waitUntil(() -> (debouncer.calculate(getSensorOutput())) == state)
                 .withTimeout(timeout);
     }
 
@@ -127,12 +119,12 @@ public class Arm extends SubsystemBase {
         return Commands.runOnce(() -> mSensor = MSensor);
     }
 
-    public Trigger sensorTrigger() {
-        return new Trigger(() -> inputs.luniteDetected);
+    public Trigger sensorFilter() {
+        return new Trigger(() -> debouncer.calculate(getSensorOutput()));
     }
 
-    public Trigger filterTimeElapsed() {
-        return new Trigger(() -> timer.hasElapsed(Constants.SENSOR_FILTER_TIME));
+    public boolean getSensorOutput() {
+        return inputs.luniteDetected || mSensor || inputs.luniteDetected2 || inputs.luniteDetected3;
     }
 
     public void stop() {
