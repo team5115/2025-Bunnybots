@@ -31,6 +31,7 @@ import frc.team5115.subsystems.outtake.Outtake;
 import frc.team5115.subsystems.outtake.OuttakeIO;
 import frc.team5115.subsystems.outtake.OuttakeIOReal;
 import frc.team5115.subsystems.outtake.OuttakeIOSim;
+import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -89,6 +90,7 @@ public class RobotContainer {
                 arm = new Arm(new ArmIOSim());
                 intakeWheel = new IntakeWheel(new IntakeWheelIOSim());
                 catcher = new Catcher(new CatcherIOSim());
+                SimulatedArena.getInstance();
                 break;
 
             default:
@@ -165,6 +167,8 @@ public class RobotContainer {
             faultPrintTimeout -= 1;
             Logger.recordOutput("HasFaults", hasFaults);
             Logger.recordOutput("ClearForMatch", !hasFaults);
+        } else {
+            SimulatedArena.getInstance().simulationPeriodic();
         }
     }
 
