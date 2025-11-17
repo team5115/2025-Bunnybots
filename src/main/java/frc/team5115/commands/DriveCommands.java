@@ -73,17 +73,19 @@ public class DriveCommands {
 
     public static Command xferLunite(Outtake outtake, Arm arm, IntakeWheel intakeWheel) {
         return Commands.sequence(
+                outtake.retract(),
                 outtake.setLock(true),
                 arm.stow(),
                 arm.waitForSetpoint(1.5),
                 intakeWheel.xfer(),
-                Commands.waitSeconds(1),
+                arm.waitForSensorState(false, 1),
+                Commands.waitSeconds(0.5),
                 outtake.setLock(false));
     }
 
     public static Command intake(Arm arm, IntakeWheel intakeWheel) {
         return Commands.sequence(
-                arm.deploy(), intakeWheel.intake(), arm.waitForSensorState(true, Double.POSITIVE_INFINITY));
+                arm.deploy(), intakeWheel.intake(), arm.waitForSensorState(true, Double.POSITIVE_INFINITY), intakeWheel.stop());
     }
 
     public static Command vomit(Arm arm, IntakeWheel intakeWheel) {
