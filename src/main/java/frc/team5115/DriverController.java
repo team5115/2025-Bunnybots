@@ -74,6 +74,7 @@ public class DriverController {
 
         arm.sensorFilter()
                 .and(() -> !outtake.isLockOverride())
+                .and(() -> arm.getPosition() == Arm.Position.DEPLOYED)
                 .onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
         joyDrive
@@ -96,8 +97,7 @@ public class DriverController {
 
         joyDrive.y().onTrue(DriveCommands.stow(arm, intakeWheel));
 
-        joyDrive.povLeft().onTrue(arm.setMSensor(true));
-        joyDrive.povRight().onFalse(arm.setMSensor(false));
+        joyDrive.povLeft().onTrue(arm.setMSensor(true)).onFalse(arm.setMSensor(false));
     }
 
     private void configureDualMode(
@@ -110,6 +110,7 @@ public class DriverController {
 
         arm.sensorFilter()
                 .and(() -> !outtake.isLockOverride())
+                .and(() -> arm.getPosition() == Arm.Position.DEPLOYED)
                 .onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
         joyManip.x().onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
