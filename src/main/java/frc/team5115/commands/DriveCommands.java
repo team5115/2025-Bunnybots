@@ -86,10 +86,8 @@ public class DriveCommands {
 
     public static Command intake(Arm arm, IntakeWheel intakeWheel) {
         return Commands.sequence(
-                arm.deploy(),
-                intakeWheel.intake(),
-                arm.waitForSensorState(true, Double.POSITIVE_INFINITY),
-                intakeWheel.stop());
+                arm.deploy(), intakeWheel.intake(), arm.waitForSensorState(true, Double.POSITIVE_INFINITY)
+                /* ,intakeWheel.stop() */ );
     }
 
     public static Command vomit(Arm arm, IntakeWheel intakeWheel) {
