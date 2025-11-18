@@ -9,11 +9,17 @@
           "data": {
             "name": "dispense"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "leave (other) (red)"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Red",
   "choreoAuto": true
 }
