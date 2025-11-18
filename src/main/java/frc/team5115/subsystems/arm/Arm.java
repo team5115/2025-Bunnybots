@@ -61,7 +61,7 @@ public class Arm extends SubsystemBase {
         }
 
         pid.setTolerance(5);
-        pid.setSetpoint(Constants.ARM_STOW_ANGLE_DEG);
+        pid.setSetpoint(position.rotation.getDegrees());
 
         sysId =
                 new SysIdRoutine(

@@ -36,8 +36,6 @@ public final class Constants {
     public static final byte OUTTAKE_REVERSE_CHANNEL = 10;
 
     public static final byte ARM_MOTOR_ID = 11;
-    public static final double ARM_STOW_ANGLE_DEG = 75.0;
-    public static final double ARM_DEPLOY_ANGLE_DEG = 0.0;
 
     public static final byte INTAKE_MOTOR_ID = 12;
     public static final double INTAKE_SPEED = 0.15;
