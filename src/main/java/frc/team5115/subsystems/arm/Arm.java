@@ -44,24 +44,24 @@ public class Arm extends SubsystemBase {
         switch (Constants.currentMode) {
             case REAL:
             case REPLAY:
-                feedforward = new ArmFeedforward(0.3, 0.35, 0.13509, 0.048686);
-                pid = new PIDController(0.405, 0.0, 0.0);
-                ks = 0.3;
+                ks = 0.0;
+                pid = new PIDController(0.001, 0.0, 0.0);
+                feedforward = new ArmFeedforward(ks, 0.0, 0.001, 0.0);
                 break;
             case SIM:
-                feedforward = new ArmFeedforward(0.0, 0.35, 0.1351, 0.0);
+                ks = 0.0;
+                feedforward = new ArmFeedforward(ks, 0.35, 0.1351, 0.0);
                 pid = new PIDController(0.5, 0.0, 0.0);
-                ks = 0.3;
                 break;
             default:
-                feedforward = new ArmFeedforward(0.0, 0.0, 0, 0.0);
+                ks = 0.0;
+                feedforward = new ArmFeedforward(ks, 0.0, 0, 0.0);
                 pid = new PIDController(0.0, 0.0, 0.0);
-                ks = 0.3;
                 break;
         }
 
         pid.setTolerance(5);
-        pid.setSetpoint(Constants.ARM_STOW_ANGLE_DEG);
+        pid.setSetpoint(position.rotation.getDegrees());
 
         sysId =
                 new SysIdRoutine(
