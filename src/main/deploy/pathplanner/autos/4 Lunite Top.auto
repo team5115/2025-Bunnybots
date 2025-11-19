@@ -1,0 +1,62 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "dispense"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Get1 (other)"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "xfer"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "half leave (other) "
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Redispense (get1) (other)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "dispense"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Blue",
+  "choreoAuto": true
+}

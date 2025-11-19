@@ -9,12 +9,6 @@
           "data": {
             "name": "dispense"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "leave (other)"
-          }
         }
       ]
     }
