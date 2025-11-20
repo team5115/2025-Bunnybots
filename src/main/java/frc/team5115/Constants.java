@@ -32,8 +32,8 @@ public final class Constants {
     public static final double SLOW_MODE_SPEED = 0.4;
 
     public static final byte PNEUMATIC_HUB_ID = 2;
-    public static final byte OUTTAKE_FORWARD_CHANNEL = 9;
-    public static final byte OUTTAKE_REVERSE_CHANNEL = 10;
+    public static final byte OUTTAKE_FORWARD_CHANNEL = 0;
+    public static final byte OUTTAKE_REVERSE_CHANNEL = 1;
 
     public static final byte ARM_MOTOR_ID = 11;
 
