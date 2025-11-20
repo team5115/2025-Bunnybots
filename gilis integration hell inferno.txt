@@ -1,0 +1,5 @@
+change sensor, pneumatic hub, pneumatic, sparkmax ids
+zero swerve modules and arms
+run sysid for arm
+check pneumatic hub orientation (back/fwd)
+check motor directions
