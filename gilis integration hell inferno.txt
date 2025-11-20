@@ -1,5 +1,18 @@
 change sensor, pneumatic hub, pneumatic, sparkmax ids
 zero swerve modules and arms
-run sysid for arm
-check pneumatic hub orientation (back/fwd)
+check pneumatic piston orientation (back/fwd)
 check motor directions
+run sysid for arm
+
+Prompt:
+    "Turn this checklist for integrating code onto a robot into a poem in the style of Dante's Divine Comedy.
+    Make it one (or two) stanzas."
+ChatGPT Response: 
+    Change sensors first—record their names and IDs true,
+    Set pneumatics’ piston in rightful face, forward or back its destined place;
+    Assign each SparkMAX number through and through,
+    Then zero swerve and arm so none fall out of grace.
+
+    Next test the motors’ turning paths to see which way they yearn to roam,
+    And end with SysId’s solemn rite,
+    Where force and motion find their proper home.
