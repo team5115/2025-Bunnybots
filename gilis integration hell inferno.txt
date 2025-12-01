@@ -1,7 +1,7 @@
 Completed:
 CAN IDs are all set
-
 Zero swerve modules and arm
+
 Check pneumatic piston directions (back/fwd)
 Check motor directions (arm & intake, IDs 11 & 12)
 Run sysid for arm
@@ -21,3 +21,20 @@ ChatGPT Response:
     Next test the motors’ turning paths to see which way they yearn to roam,
     And end with SysId’s solemn rite,
     Where force and motion find their proper home.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    meow meow meow meoooow :3
