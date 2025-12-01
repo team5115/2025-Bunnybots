@@ -13,13 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "leave (other)"
+            "pathName": "leave (red)"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Blue",
+  "folder": "Red",
   "choreoAuto": true
 }

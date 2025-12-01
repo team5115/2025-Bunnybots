@@ -17,7 +17,38 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Get1"
+                  "pathName": "Get1 (red)"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              },
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "xfer"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Get2 (red)"
                 }
               },
               {
@@ -42,7 +73,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Redispense (get1)"
+                  "pathName": "Get3 (red)"
                 }
               },
               {
@@ -57,6 +88,18 @@
         {
           "type": "named",
           "data": {
+            "name": "xfer"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Redispense (get3) (red)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "dispense"
           }
         }
@@ -64,6 +107,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Blue",
+  "folder": "Red",
   "choreoAuto": true
 }

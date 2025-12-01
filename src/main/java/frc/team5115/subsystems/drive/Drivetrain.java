@@ -114,7 +114,7 @@ public class Drivetrain extends SubsystemBase {
                         new PIDConstants(linear_kp, linear_ki, linear_kd),
                         new PIDConstants(angular_kp, angular_ki, angular_kd)),
                 SwerveConstants.getRobotConfig(),
-                () -> isRedAlliance(),
+                () -> false,
                 this);
         Pathfinding.setPathfinder(new LocalADStarAK());
         PathPlannerLogging.setLogActivePathCallback(

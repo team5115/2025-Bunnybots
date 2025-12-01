@@ -179,3 +179,4 @@ src/main/java/frc/team5115/BuildConstants.java
 
 # include photon config zip
 !photon_calibration/*.zip
+5115.env 
