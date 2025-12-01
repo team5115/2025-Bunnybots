@@ -19,7 +19,7 @@ public class IntakeWheelIOSparkMax implements IntakeWheelIO {
         encoder = motor.getEncoder();
 
         final SparkMaxConfig motorConfig = new SparkMaxConfig();
-        motorConfig.smartCurrentLimit(20, 20).idleMode(IdleMode.kCoast);
+        motorConfig.smartCurrentLimit(20, 20).idleMode(IdleMode.kCoast).inverted(true);
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
