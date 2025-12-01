@@ -31,7 +31,6 @@ import frc.team5115.subsystems.outtake.Outtake;
 import frc.team5115.subsystems.outtake.OuttakeIO;
 import frc.team5115.subsystems.outtake.OuttakeIOReal;
 import frc.team5115.subsystems.outtake.OuttakeIOSim;
-import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -74,7 +73,8 @@ public class RobotContainer {
                                 new ModuleIOSparkMax(0),
                                 new ModuleIOSparkMax(1),
                                 new ModuleIOSparkMax(2),
-                                new ModuleIOSparkMax(3));
+                                new ModuleIOSparkMax(3),
+                                (pose) -> {});
                 outtake = new Outtake(new OuttakeIOReal(hub));
                 arm = new Arm(new ArmIOSparkMax());
                 intakeWheel = new IntakeWheel(new IntakeWheelIOSparkMax());
@@ -82,15 +82,22 @@ public class RobotContainer {
                 break;
             case SIM:
                 // Sim robot, instantiate physics sim IO implementations
+                MapleSim.getInstance();
+                MapleSim.setupArena();
+                MapleSim.initInstance();
                 gyro = new GyroIO() {};
                 drivetrain =
                         new Drivetrain(
-                                gyro, new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
+                                gyro,
+                                new ModuleIOSim(),
+                                new ModuleIOSim(),
+                                new ModuleIOSim(),
+                                new ModuleIOSim(),
+                                MapleSim.swerveSim::setSimulationWorldPose);
                 outtake = new Outtake(new OuttakeIOSim());
                 arm = new Arm(new ArmIOSim());
                 intakeWheel = new IntakeWheel(new IntakeWheelIOSim());
                 catcher = new Catcher(new CatcherIOSim());
-                SimulatedArena.getInstance();
                 break;
 
             default:
@@ -98,7 +105,12 @@ public class RobotContainer {
                 gyro = new GyroIO() {};
                 drivetrain =
                         new Drivetrain(
-                                gyro, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
+                                gyro,
+                                new ModuleIO() {},
+                                new ModuleIO() {},
+                                new ModuleIO() {},
+                                new ModuleIO() {},
+                                (pose) -> {});
                 outtake = new Outtake(new OuttakeIO() {});
                 arm = new Arm(new ArmIO() {});
                 intakeWheel = new IntakeWheel(new IntakeWheelIO() {});
@@ -168,7 +180,7 @@ public class RobotContainer {
             Logger.recordOutput("HasFaults", hasFaults);
             Logger.recordOutput("ClearForMatch", !hasFaults);
         } else {
-            SimulatedArena.getInstance().simulationPeriodic();
+            MapleSim.simPeriodic();
         }
     }
 

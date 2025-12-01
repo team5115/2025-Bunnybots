@@ -12,8 +12,11 @@ import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
 import org.ironmaple.simulation.seasonspecific.crescendo2024.CrescendoNoteOnField;
+import org.littletonrobotics.junction.Logger;
 
 public class MapleSim {
+
+    public static SwerveDriveSimulation swerveSim;
 
     public static SimulatedArena getInstance() {
         return SimulatedArena.getInstance();
@@ -25,6 +28,10 @@ public class MapleSim {
 
     public static void simPeriodic() {
         SimulatedArena.getInstance().simulationPeriodic();
+
+        Logger.recordOutput("FieldSimulation/RobotPosition", swerveSim.getSimulatedDriveTrainPose());
+        Logger.recordOutput(
+                "FieldSimulation/Note", SimulatedArena.getInstance().getGamePiecesArrayByType("Note"));
     }
 
     public static DriveTrainSimulationConfig getDriveSimConfig() {
@@ -49,11 +56,13 @@ public class MapleSim {
                 .withBumperSize(Inches.of(30), Inches.of(30)); // TODO: correct numbers
     }
 
-    public static SwerveDriveSimulation initInstance() {
-        return new SwerveDriveSimulation(
-                // Specify Configuration
-                MapleSim.getDriveSimConfig(),
-                // Specify starting pose
-                new Pose2d(3, 3, new Rotation2d()));
+    public static void initInstance() {
+        swerveSim =
+                new SwerveDriveSimulation(
+                        // Specify Configuration
+                        MapleSim.getDriveSimConfig(),
+                        // Specify starting pose
+                        new Pose2d(3, 3, new Rotation2d()));
+        SimulatedArena.getInstance().addDriveTrainSimulation(swerveSim);
     }
 }
