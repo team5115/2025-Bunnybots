@@ -1,5 +1,8 @@
 package frc.team5115.subsystems.arm;
 
+import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Volts;
+
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -66,9 +69,9 @@ public class Arm extends SubsystemBase {
         sysId =
                 new SysIdRoutine(
                         new SysIdRoutine.Config(
-                                null,
-                                null,
-                                null,
+                                Volts.of(6).div(Seconds.of(1)),
+                                Volts.of(12),
+                                Seconds.of(10),
                                 (state) -> Logger.recordOutput("Arm/SysIdState", state.toString())),
                         new SysIdRoutine.Mechanism(
                                 (voltage) -> io.setArmVoltage(voltage.magnitude()), null, this));

@@ -1,9 +1,9 @@
 Completed:
 CAN IDs are all set
 Zero swerve modules and arm
-
 Check pneumatic piston directions (back/fwd)
 Check motor directions (arm & intake, IDs 11 & 12)
+
 Run sysid for arm
 fill in choreo information (weight, MOI, speeds)
 test auto in stages (6, 5, 4) -> practice making changes
