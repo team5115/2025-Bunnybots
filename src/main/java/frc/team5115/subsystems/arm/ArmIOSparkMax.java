@@ -29,7 +29,7 @@ public class ArmIOSparkMax implements ArmIO {
         absoluteEncoder = motor.getAbsoluteEncoder();
         final SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.smartCurrentLimit(30, 40).idleMode(IdleMode.kCoast);
-        motorConfig.absoluteEncoder.positionConversionFactor(180);
+        motorConfig.absoluteEncoder.positionConversionFactor(360);
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
@@ -47,11 +47,7 @@ public class ArmIOSparkMax implements ArmIO {
     @Override
     public void updateInputs(ArmIOInputs inputs) {
         inputs.armVelocityRPM = absoluteEncoder.getVelocity() * 60.0;
-        if (absoluteEncoder.getPosition() > 160) {
-            inputs.armAngle = Rotation2d.fromDegrees(absoluteEncoder.getPosition() - 180.0);
-        } else {
-            inputs.armAngle = Rotation2d.fromDegrees(absoluteEncoder.getPosition());
-        }
+        inputs.armAngle = Rotation2d.fromDegrees(absoluteEncoder.getPosition());
         inputs.currentAmps = motor.getOutputCurrent();
         inputs.appliedVolts = motor.getAppliedOutput() * motor.getBusVoltage();
         inputs.luniteDetected = sensor.get();
