@@ -50,8 +50,8 @@ public class ArmIOSparkMax implements ArmIO {
         inputs.armAngle = Rotation2d.fromDegrees(absoluteEncoder.getPosition());
         inputs.currentAmps = motor.getOutputCurrent();
         inputs.appliedVolts = motor.getAppliedOutput() * motor.getBusVoltage();
-        inputs.luniteDetected = sensor.get();
-        inputs.luniteDetected2 = sensor2.get();
-        inputs.luniteDetected3 = sensor3.get();
+        inputs.luniteDetected = !sensor.get();
+        inputs.luniteDetected2 = !sensor2.get();
+        inputs.luniteDetected3 = !sensor3.get();
     }
 }
