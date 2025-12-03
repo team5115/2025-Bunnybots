@@ -89,6 +89,10 @@ public class Arm extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("Arm", inputs);
+        Logger.recordOutput("Arm/RealVelocityRadsPerSec", inputs.armVelocityRPM / 60d * 2d * Math.PI);
+        Logger.recordOutput(
+                "Arm/RealAngleRads",
+                MathUtil.inputModulus(inputs.armAngle.getRadians(), -Math.PI, Math.PI));
         Logger.recordOutput("Arm/Setpoint Degrees", pid.getSetpoint());
         Logger.recordOutput("Arm/At Setpoint?", pid.atSetpoint());
         Logger.recordOutput("Arm/mSensor", this.mSensor);
