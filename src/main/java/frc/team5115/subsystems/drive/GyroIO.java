@@ -1,10 +1,9 @@
 package frc.team5115.subsystems.drive;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.measure.AngularVelocity;
-
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.AngularVelocity;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface GyroIO {
