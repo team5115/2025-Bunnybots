@@ -6,6 +6,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import frc.team5115.subsystems.drive.GyroIOSim;
+
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.GyroSimulation;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -37,7 +39,7 @@ public class MapleSim {
     public static DriveTrainSimulationConfig getDriveSimConfig() {
         return DriveTrainSimulationConfig.Default()
                 // Specify gyro type (for realistic gyro drifting and error simulation)
-                .withGyro(() -> new GyroSimulation(0, 0))
+                .withGyro(() -> new GyroSimulation(0,0))
                 // Specify swerve module (for realistic swerve dynamics)
                 .withSwerveModule(
                         new SwerveModuleSimulationConfig(

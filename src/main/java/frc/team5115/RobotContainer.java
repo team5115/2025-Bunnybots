@@ -20,6 +20,7 @@ import frc.team5115.subsystems.catcher.CatcherIOSim;
 import frc.team5115.subsystems.drive.Drivetrain;
 import frc.team5115.subsystems.drive.GyroIO;
 import frc.team5115.subsystems.drive.GyroIONavx;
+import frc.team5115.subsystems.drive.GyroIOSim;
 import frc.team5115.subsystems.drive.ModuleIO;
 import frc.team5115.subsystems.drive.ModuleIOSim;
 import frc.team5115.subsystems.drive.ModuleIOSparkMax;
@@ -31,6 +32,7 @@ import frc.team5115.subsystems.outtake.Outtake;
 import frc.team5115.subsystems.outtake.OuttakeIO;
 import frc.team5115.subsystems.outtake.OuttakeIOReal;
 import frc.team5115.subsystems.outtake.OuttakeIOSim;
+import org.ironmaple.simulation.drivesims.GyroSimulation;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -85,7 +87,7 @@ public class RobotContainer {
                 MapleSim.getInstance();
                 MapleSim.setupArena();
                 MapleSim.initInstance();
-                gyro = new GyroIO() {};
+                gyro = new GyroIOSim(new GyroSimulation(0, 0));
                 drivetrain =
                         new Drivetrain(
                                 gyro,

@@ -1,6 +1,7 @@
 package frc.team5115.subsystems.drive;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.AngularVelocity;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface GyroIO {
@@ -12,4 +13,12 @@ public interface GyroIO {
     }
 
     public default void updateInputs(GyroIOInputs inputs) {}
+
+    public default Rotation2d getGyroRotation() {
+        return null;
+    }
+
+    public default AngularVelocity getGyroAngularVelocity() {
+        return null;
+    }
 }

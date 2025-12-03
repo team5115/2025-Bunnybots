@@ -2,6 +2,8 @@ package frc.team5115.subsystems.drive;
 
 import com.studica.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
 
 public class GyroIONavx implements GyroIO {
     private final AHRS ahrs = new AHRS(AHRS.NavXComType.kMXP_SPI);
@@ -17,6 +19,16 @@ public class GyroIONavx implements GyroIO {
         inputs.yawPosition = Rotation2d.fromDegrees(-ahrs.getYaw());
         inputs.xyAcceleration =
                 ahrs.getRawAccelX() * ahrs.getRawAccelX() + ahrs.getRawAccelY() * ahrs.getRawAccelY();
+    }
+
+    @Override
+    public Rotation2d getGyroRotation() {
+        return Rotation2d.fromDegrees(ahrs.getYaw());
+    }
+
+    @Override
+    public AngularVelocity getGyroAngularVelocity() {
+        return AngularVelocity.ofBaseUnits(ahrs.getRate(), Units.DegreesPerSecond);
     }
 
     /**
