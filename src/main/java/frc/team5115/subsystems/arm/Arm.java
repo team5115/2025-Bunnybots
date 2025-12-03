@@ -109,7 +109,7 @@ public class Arm extends SubsystemBase {
                         MathUtil.inputModulus(inputs.armAngle.getRadians(), -Math.PI, Math.PI), speed);
         voltage = MathUtil.clamp(voltage, -10, +10);
 
-        if (Math.abs(voltage) < 2 * ks) {
+        if (Math.abs(voltage) < 0.1) {
             voltage = 0;
         }
 
