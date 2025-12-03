@@ -32,7 +32,6 @@ import frc.team5115.subsystems.outtake.Outtake;
 import frc.team5115.subsystems.outtake.OuttakeIO;
 import frc.team5115.subsystems.outtake.OuttakeIOReal;
 import frc.team5115.subsystems.outtake.OuttakeIOSim;
-import org.ironmaple.simulation.drivesims.GyroSimulation;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -87,15 +86,16 @@ public class RobotContainer {
                 MapleSim.getInstance();
                 MapleSim.setupArena();
                 MapleSim.initInstance();
-                gyro = new GyroIOSim(new GyroSimulation(0, 0));
+                var swerveSim = MapleSim.getSwerveSim();
+                gyro = new GyroIOSim(swerveSim.getGyroSimulation());
                 drivetrain =
                         new Drivetrain(
                                 gyro,
-                                new ModuleIOSim(),
-                                new ModuleIOSim(),
-                                new ModuleIOSim(),
-                                new ModuleIOSim(),
-                                MapleSim.swerveSim::setSimulationWorldPose);
+                                new ModuleIOSim(swerveSim.getModules()[0]),
+                                new ModuleIOSim(swerveSim.getModules()[1]),
+                                new ModuleIOSim(swerveSim.getModules()[3]),
+                                new ModuleIOSim(swerveSim.getModules()[2]),
+                                swerveSim::setSimulationWorldPose);
                 outtake = new Outtake(new OuttakeIOSim());
                 arm = new Arm(new ArmIOSim());
                 intakeWheel = new IntakeWheel(new IntakeWheelIOSim());
