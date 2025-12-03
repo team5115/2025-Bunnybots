@@ -96,8 +96,11 @@ public class Arm extends SubsystemBase {
         Logger.recordOutput("Arm/Filtered Sensor", this.filterTrigger.getAsBoolean());
 
         // Update the pids and feedforward
-        final double speed = pid.calculate(inputs.armAngle.getDegrees());
-        double voltage = feedforward.calculate(inputs.armAngle.getRadians(), speed);
+        final double speed =
+                pid.calculate(MathUtil.inputModulus(inputs.armAngle.getDegrees(), -180, 180));
+        double voltage =
+                feedforward.calculate(
+                        MathUtil.inputModulus(inputs.armAngle.getRadians(), -Math.PI, Math.PI), speed);
         voltage = MathUtil.clamp(voltage, -10, +10);
 
         if (Math.abs(voltage) < 2 * ks) {
