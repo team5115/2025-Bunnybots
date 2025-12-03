@@ -10,15 +10,8 @@ public interface GyroIO {
         public boolean connected = false;
         public Rotation2d yawPosition = new Rotation2d();
         public double xyAcceleration = 0;
+        public AngularVelocity angularVelocity = AngularVelocity.ofBaseUnits(0, null);
     }
 
     public default void updateInputs(GyroIOInputs inputs) {}
-
-    public default Rotation2d getGyroRotation() {
-        return null;
-    }
-
-    public default AngularVelocity getGyroAngularVelocity() {
-        return null;
-    }
 }
