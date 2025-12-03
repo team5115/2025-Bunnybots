@@ -32,7 +32,7 @@ public class Arm extends SubsystemBase {
 
     public enum Position {
         DEPLOYED(0),
-        STOWED(75);
+        STOWED(140);
 
         public final Rotation2d rotation;
 
