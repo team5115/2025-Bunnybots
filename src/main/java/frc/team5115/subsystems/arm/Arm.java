@@ -31,8 +31,8 @@ public class Arm extends SubsystemBase {
     private Position position = Position.STOWED;
 
     public enum Position {
-        DEPLOYED(0),
-        SAFE_STOW(100),
+        DEPLOYED(3),
+        SAFE_STOW(45),
         STOWED(140);
 
         public final Rotation2d rotation;
@@ -51,8 +51,8 @@ public class Arm extends SubsystemBase {
                 ks = 1.0; // 5.464
                 pid =
                         new PIDController(
-                                0.9, 0.12, 0.0); // 27.44 from sysid for kp (except its in the wrong units)
-                feedforward = new ArmFeedforward(ks, 1.0, 0.13195, 0.0);
+                                0.2, 0.0, 0.0); // 27.44 from sysid for kp (except its in the wrong units)
+                feedforward = new ArmFeedforward(ks, 0.0, 0.25, 0.0);
                 break;
             case SIM:
                 ks = 0.0;
@@ -108,7 +108,7 @@ public class Arm extends SubsystemBase {
                 pid.calculate(MathUtil.inputModulus(inputs.armAngle.getDegrees(), -180, 180));
         double voltage =
                 feedforward.calculate(
-                        MathUtil.inputModulus(inputs.armAngle.getRadians(), -Math.PI, Math.PI), speed);
+                        MathUtil.inputModulus(position.rotation.getRadians(), -Math.PI, Math.PI), speed);
         voltage = MathUtil.clamp(voltage, -10, +10);
 
         if (Math.abs(voltage) < 0.1) {
