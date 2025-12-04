@@ -54,7 +54,7 @@ public final class Constants {
     public static final double LOOP_PERIOD_SECS = 0.02;
 
     public static final double SENSOR_FILTER_TIME =
-            0.2; // Amount of time to wait while the sensor is true before starting the xfer routine
+            0.05; // Amount of time to wait while the sensor is true before starting the xfer routine
 
     public static class SwerveConstants {
         public static final byte FRONT_LEFT_DRIVE_ID = 6;

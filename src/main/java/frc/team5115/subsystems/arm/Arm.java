@@ -47,11 +47,11 @@ public class Arm extends SubsystemBase {
         switch (Constants.currentMode) {
             case REAL:
             case REPLAY:
-                ks = 2.0; // 5.464
+                ks = 1.0; // 5.464
                 pid =
                         new PIDController(
-                                0.001, 0.0, 0.0); // 27.44 from sysid for kp (except its in the wrong units)
-                feedforward = new ArmFeedforward(ks, 3.3849, 0.13195, 0.20978);
+                                0.9, 0.12, 0.0); // 27.44 from sysid for kp (except its in the wrong units)
+                feedforward = new ArmFeedforward(ks, 1.0, 0.13195, 0.0);
                 break;
             case SIM:
                 ks = 0.0;
