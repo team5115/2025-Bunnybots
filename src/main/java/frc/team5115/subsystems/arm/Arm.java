@@ -122,6 +122,10 @@ public class Arm extends SubsystemBase {
         return Commands.waitUntil(() -> pid.atSetpoint()).withTimeout(timeout);
     }
 
+    public Command waitForBelowLock(double timeout) {
+        return Commands.waitUntil(() -> belowLock()).withTimeout(timeout);
+    }
+
     public boolean belowLock() {
         return inputs.armAngle.getDegrees() < 125;
     }
