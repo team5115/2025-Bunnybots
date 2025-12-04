@@ -32,6 +32,7 @@ public class Arm extends SubsystemBase {
 
     public enum Position {
         DEPLOYED(0),
+        SAFE_STOW(100),
         STOWED(140);
 
         public final Rotation2d rotation;
@@ -116,10 +117,13 @@ public class Arm extends SubsystemBase {
 
         io.setArmVoltage(voltage);
     }
-    // meow meow meow, meowwww
 
     public Command waitForSetpoint(double timeout) {
         return Commands.waitUntil(() -> pid.atSetpoint()).withTimeout(timeout);
+    }
+
+    public boolean belowLock() {
+        return inputs.armAngle.getDegrees() < 125;
     }
 
     public Command setAngle(Position setpoint) {
@@ -145,6 +149,10 @@ public class Arm extends SubsystemBase {
 
     public Command deploy() {
         return setAngle(Position.DEPLOYED);
+    }
+
+    public Command safeStow() {
+        return setAngle(Position.SAFE_STOW);
     }
 
     public Command waitForSensorState(boolean state, double timeout) {
