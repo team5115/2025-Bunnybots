@@ -64,6 +64,27 @@ public class DriverController {
         return slowMode;
     }
 
+    /**
+     * Sensor detects lunite at deployed position -> xfer
+     * 
+     * holding B OR holding right trigger <-> scoring mech in/out
+     * 
+     * back button -> vomit (hold)
+     * 
+     * left trigger -> scoring lock override (hold)
+     * 
+     * x -> xfer lunite command
+     * 
+     * a -> intake command
+     * 
+     * y -> stow arm
+     * 
+     * pov left -> fake sensor (hold)
+     * 
+     * pov up -> extend actuators to deploy net
+     * pov down -> retract net actuators
+     * 
+     */
     private void configureSingleMode(
             Arm arm, Outtake outtake, IntakeWheel intakeWheel, Drivetrain drivetrain, Catcher catcher) {
 
@@ -78,13 +99,15 @@ public class DriverController {
                 .onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
         joyDrive
-                .b()
+                .b().or(joyDrive.rightTrigger())
                 .and(() -> !outtake.getLocked())
                 .onTrue(outtake.extend())
                 .onFalse(outtake.retract());
+
         joyDrive.back().onTrue(intakeWheel.vomit()).onFalse(intakeWheel.stop());
+
         joyDrive
-                .rightTrigger()
+                .leftTrigger()
                 .onTrue(outtake.setLockOverride(true))
                 .onFalse(outtake.setLockOverride(false));
 
@@ -116,13 +139,13 @@ public class DriverController {
         joyManip.x().onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
         joyManip
-                .b()
+                .b().or(joyManip.rightTrigger())
                 .and(() -> !outtake.getLocked())
                 .onTrue(outtake.extend())
                 .onFalse(outtake.retract());
         joyManip.back().onTrue(DriveCommands.vomit(arm, intakeWheel));
         joyManip
-                .rightTrigger()
+                .leftTrigger()
                 .onTrue(outtake.setLockOverride(true))
                 .onFalse(outtake.setLockOverride(false));
 

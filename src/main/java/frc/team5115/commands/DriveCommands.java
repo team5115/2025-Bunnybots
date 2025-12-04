@@ -95,6 +95,6 @@ public class DriveCommands {
     }
 
     public static Command stow(Arm arm, IntakeWheel intakeWheel) {
-        return Commands.parallel(arm.stow(), intakeWheel.intake());
+        return Commands.parallel(arm.stow(), intakeWheel.stop());
     }
 }
