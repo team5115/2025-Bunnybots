@@ -95,6 +95,10 @@ public class DriveCommands {
         return Commands.sequence(arm.deploy(), arm.waitForSetpoint(1), intakeWheel.vomit());
     }
 
+    public static Command safeStow(Arm arm, IntakeWheel intakeWheel) {
+        return Commands.parallel(arm.safeStow(), intakeWheel.stop());
+    }
+
     public static Command stow(Arm arm, IntakeWheel intakeWheel) {
         return Commands.parallel(arm.stow(), intakeWheel.stop());
     }

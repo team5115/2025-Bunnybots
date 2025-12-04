@@ -67,17 +67,19 @@ public class DriverController {
     /**
      * Sensor detects lunite at deployed position -> xfer
      *
-     * <p>holding B OR holding right trigger <-> scoring mech in/out
+     * <p>holding right trigger <-> scoring mech in/out
      *
      * <p>back button -> vomit (hold)
      *
      * <p>left trigger -> scoring lock override (hold)
      *
      * <p>x -> xfer lunite command
+     * 
+     * <p>b -> dangerous stow command
      *
      * <p>a -> intake command
      *
-     * <p>y -> stow arm
+     * <p>y -> safe stow arm
      *
      * <p>pov left -> fake sensor (hold)
      *
@@ -97,9 +99,8 @@ public class DriverController {
                 .onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
         joyDrive
-                .b()
-                .or(joyDrive.rightTrigger())
-                .and(() -> !outtake.getLocked())
+                .rightTrigger()
+                .and(() -> arm.belowLock() && !outtake.getLocked())
                 .onTrue(outtake.extend())
                 .onFalse(outtake.retract());
 
@@ -112,12 +113,14 @@ public class DriverController {
 
         joyDrive.x().onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
+        joyDrive.b().onTrue(DriveCommands.stow(arm, intakeWheel));
+
         joyDrive.povUp().onTrue(catcher.extendNet());
         joyDrive.povDown().onTrue(catcher.retractNet());
 
         joyDrive.a().onTrue(DriveCommands.intake(arm, intakeWheel));
 
-        joyDrive.y().onTrue(DriveCommands.stow(arm, intakeWheel));
+        joyDrive.y().onTrue(DriveCommands.safeStow(arm, intakeWheel));
 
         joyDrive.povLeft().onTrue(arm.setMSensor(true)).onFalse(arm.setMSensor(false));
     }
@@ -138,8 +141,7 @@ public class DriverController {
         joyManip.x().onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
         joyManip
-                .b()
-                .or(joyManip.rightTrigger())
+                .rightTrigger()
                 .and(() -> !outtake.getLocked())
                 .onTrue(outtake.extend())
                 .onFalse(outtake.retract());
@@ -154,7 +156,9 @@ public class DriverController {
 
         joyManip.a().onTrue(DriveCommands.intake(arm, intakeWheel));
 
-        joyManip.y().onTrue(DriveCommands.stow(arm, intakeWheel));
+        joyManip.b().onTrue(DriveCommands.stow(arm, intakeWheel));
+
+        joyManip.y().onTrue(DriveCommands.safeStow(arm, intakeWheel));
     }
 
     public boolean joysticksConnected() {
