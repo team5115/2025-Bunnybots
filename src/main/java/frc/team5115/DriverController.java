@@ -100,7 +100,7 @@ public class DriverController {
 
         joyDrive
                 .rightTrigger()
-                .and(() -> arm.belowLock())
+                .and(() -> !outtake.getLocked())
                 .onTrue(DriveCommands.score(arm, intakeWheel, outtake))
                 .onFalse(outtake.retract());
 
