@@ -93,11 +93,7 @@ public class DriveCommands {
 
     public static Command score(Arm arm, IntakeWheel intakeWheel, Outtake outtake) {
         return Commands.sequence(
-            arm.safeStow(),
-            Commands.waitSeconds(0.3),
-            arm.waitForBelowLock(0.5),
-            outtake.extend()
-        );
+                arm.safeStow(), Commands.waitSeconds(0.3), arm.waitForBelowLock(0.5), outtake.extend());
     }
 
     public static Command vomit(Arm arm, IntakeWheel intakeWheel) {
