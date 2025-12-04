@@ -74,7 +74,7 @@ public class DriverController {
      * <p>left trigger -> scoring lock override (hold)
      *
      * <p>x -> xfer lunite command
-     * 
+     *
      * <p>b -> dangerous stow command
      *
      * <p>a -> intake command
