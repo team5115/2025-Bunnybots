@@ -76,6 +76,7 @@ public class DriveCommands {
                 outtake.retract(),
                 outtake.setLock(true),
                 arm.stow(),
+                Commands.waitSeconds(0.5),
                 arm.waitForSetpoint(1.5),
                 intakeWheel.xfer(),
                 arm.waitForSensorState(false, 1),
