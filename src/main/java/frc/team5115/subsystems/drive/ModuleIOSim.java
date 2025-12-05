@@ -1,11 +1,17 @@
 package frc.team5115.subsystems.drive;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Volts;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import frc.team5115.Constants;
+// import edu.wpi.first.math.system.plant.DCMotor;
+// import edu.wpi.first.math.system.plant.LinearSystemId;
+// import edu.wpi.first.units.measure.Voltage;
+// import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+// import frc.team5115.Constants;
+import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
+import org.ironmaple.simulation.motorsims.SimulatedMotorController;
 
 /**
  * Physics sim implementation of module IO.
@@ -15,49 +21,54 @@ import frc.team5115.Constants;
  * approximation for the behavior of the module.
  */
 public class ModuleIOSim implements ModuleIO {
-    private final DCMotorSim driveSim;
-    private final DCMotorSim turnSim;
+    private final SimulatedMotorController.GenericMotorController driveSim;
+    private final SimulatedMotorController.GenericMotorController turnSim;
 
-    private final Rotation2d turnAbsoluteInitPosition = new Rotation2d(Math.random() * 2.0 * Math.PI);
+    private final SwerveModuleSimulation moduleSimulation;
+
+    // private final Rotation2d turnAbsoluteInitPosition = new Rotation2d(Math.random() * 2.0 *
+    // Math.PI);
     private double driveAppliedVolts = 0.0;
     private double turnAppliedVolts = 0.0;
 
-    public ModuleIOSim() {
+    public ModuleIOSim(SwerveModuleSimulation moduleSimulation) {
+        this.moduleSimulation = moduleSimulation;
         driveSim =
-                new DCMotorSim(
-                        LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.025, 6.75), DCMotor.getNEO(1));
-        turnSim =
-                new DCMotorSim(
-                        LinearSystemId.createDCMotorSystem(DCMotor.getNeo550(1), 0.004, 150.0 / 7.0),
-                        DCMotor.getNEO(1));
+                this.moduleSimulation.useGenericMotorControllerForDrive().withCurrentLimit(Amps.of(60));
+        // LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.025, 6.75), DCMotor.getNEO(1));
+        turnSim = moduleSimulation.useGenericControllerForSteer().withCurrentLimit(Amps.of(20));
+        // LinearSystemId.createDCMotorSystem(DCMotor.getNeo550(1), 0.004, 150.0 / 7.0),
+        // DCMotor.getNEO(1));
     }
 
     @Override
     public void updateInputs(ModuleIOInputs inputs) {
-        driveSim.update(Constants.LOOP_PERIOD_SECS);
-        turnSim.update(Constants.LOOP_PERIOD_SECS);
+        // driveSim.update(Constants.LOOP_PERIOD_SECS);
+        // turnSim.update(Constants.LOOP_PERIOD_SECS);
 
-        inputs.drivePositionRad = driveSim.getAngularPositionRad();
-        inputs.driveVelocityRadPerSec = driveSim.getAngularVelocityRadPerSec();
+        inputs.drivePositionRad = moduleSimulation.getDriveWheelFinalPosition().baseUnitMagnitude();
+        inputs.driveVelocityRadPerSec = moduleSimulation.getDriveWheelFinalSpeed().baseUnitMagnitude();
         inputs.driveAppliedVolts = driveAppliedVolts;
-        inputs.driveCurrentAmps = Math.abs(driveSim.getCurrentDrawAmps());
+        inputs.driveCurrentAmps =
+                Math.abs(moduleSimulation.getDriveMotorSupplyCurrent().baseUnitMagnitude());
 
-        inputs.turnAbsolutePosition =
-                new Rotation2d(turnSim.getAngularPositionRad()).plus(turnAbsoluteInitPosition);
-        inputs.turnVelocityRadPerSec = turnSim.getAngularVelocityRadPerSec();
+        inputs.turnAbsolutePosition = new Rotation2d(moduleSimulation.getSteerAbsoluteAngle());
+        inputs.turnVelocityRadPerSec =
+                moduleSimulation.getSteerAbsoluteEncoderSpeed().baseUnitMagnitude();
         inputs.turnAppliedVolts = turnAppliedVolts;
-        inputs.turnCurrentAmps = Math.abs(turnSim.getCurrentDrawAmps());
+        inputs.turnCurrentAmps =
+                Math.abs(moduleSimulation.getSteerMotorSupplyCurrent().baseUnitMagnitude());
     }
 
     @Override
     public void setDriveVoltage(double volts) {
         driveAppliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
-        driveSim.setInputVoltage(driveAppliedVolts);
+        driveSim.requestVoltage(Volts.of(driveAppliedVolts));
     }
 
     @Override
     public void setTurnVoltage(double volts) {
         turnAppliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
-        turnSim.setInputVoltage(turnAppliedVolts);
+        turnSim.requestVoltage(Volts.of(driveAppliedVolts));
     }
 }
