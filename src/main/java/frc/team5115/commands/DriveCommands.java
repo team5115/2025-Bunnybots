@@ -87,13 +87,12 @@ public class DriveCommands {
 
     public static Command intake(Arm arm, IntakeWheel intakeWheel) {
         return Commands.sequence(
-                arm.deploy(), intakeWheel.intake(), arm.waitForSensorState(true, Double.POSITIVE_INFINITY)
-                );
+                arm.deploy(), intakeWheel.intake(), arm.waitForSensorState(true, Double.POSITIVE_INFINITY));
     }
 
     public static Command score(Arm arm, IntakeWheel intakeWheel, Outtake outtake) {
         return Commands.sequence(
-                arm.safeStow(), Commands.waitSeconds(0.3), arm.waitForBelowLock(0.5), outtake.extend());
+                arm.safeStow(), Commands.waitSeconds(0.3), arm.waitForSafeToOuttake(0.5), outtake.extend());
     }
 
     public static Command vomit(Arm arm, IntakeWheel intakeWheel) {
