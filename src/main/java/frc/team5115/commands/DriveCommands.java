@@ -88,7 +88,7 @@ public class DriveCommands {
     public static Command intake(Arm arm, IntakeWheel intakeWheel) {
         return Commands.sequence(
                 arm.deploy(), intakeWheel.intake(), arm.waitForSensorState(true, Double.POSITIVE_INFINITY)
-                /* ,intakeWheel.stop() */ );
+                );
     }
 
     public static Command score(Arm arm, IntakeWheel intakeWheel, Outtake outtake) {

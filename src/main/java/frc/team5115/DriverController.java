@@ -122,7 +122,7 @@ public class DriverController {
 
         joyDrive.y().onTrue(DriveCommands.safeStow(arm, intakeWheel));
 
-        joyDrive.povLeft().onTrue(arm.setMSensor(true)).onFalse(arm.setMSensor(false));
+        // joyDrive.povLeft().onTrue(arm.setMSensor(true)).onFalse(arm.setMSensor(false));
     }
 
     private void configureDualMode(
@@ -143,7 +143,7 @@ public class DriverController {
         joyManip
                 .rightTrigger()
                 .and(() -> !outtake.getLocked())
-                .onTrue(outtake.extend())
+                .onTrue(DriveCommands.score(arm, intakeWheel, outtake))
                 .onFalse(outtake.retract());
         joyManip.back().onTrue(DriveCommands.vomit(arm, intakeWheel));
         joyManip
