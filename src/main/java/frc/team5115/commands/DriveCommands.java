@@ -80,7 +80,7 @@ public class DriveCommands {
                 arm.waitForSetpoint(1.5),
                 intakeWheel.xfer(),
                 arm.waitForSensorState(false, 1),
-                Commands.waitSeconds(0.5),
+                Commands.waitSeconds(Constants.EXTRA_XFER_TIME),
                 intakeWheel.stop(),
                 outtake.setLock(false));
     }

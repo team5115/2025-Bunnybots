@@ -53,8 +53,11 @@ public final class Constants {
 
     public static final double LOOP_PERIOD_SECS = 0.02;
 
-    public static final double SENSOR_FILTER_TIME =
-            0.05; // Amount of time to wait while the sensor is true before starting the xfer routine
+    // Time required for the sensor's new state before creating a change in the filtered value
+    public static final double SENSOR_FILTER_TIME = 0.05; 
+
+    // Extra time to wait during the xfer routine to ensure that lunites have landed in the outtake
+    public static final double EXTRA_XFER_TIME = 0.5;
 
     public static class SwerveConstants {
         public static final byte FRONT_LEFT_DRIVE_ID = 6;
