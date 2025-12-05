@@ -32,7 +32,7 @@ public class AutoCommands {
                 Commands.waitSeconds(0.3),
                 arm.waitForSafeToOuttake(0.5),
                 outtake.extend(),
-                Commands.waitSeconds(1),
+                Commands.waitSeconds(2),
                 outtake.retract());
     }
 }
