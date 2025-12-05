@@ -1,0 +1,42 @@
+TODO:
+rezero arm incoder
+Run sysid for arm
+fill in choreo information (weight, MOI, speeds)
+test auto in stages (6, 5, 4) -> practice making changes
+AI/ML Camera Setup
+
+Completed:
+CAN IDs are all set
+Zero swerve modules and arm
+Check pneumatic piston directions (back/fwd)
+Check motor directions (arm & intake, IDs 11 & 12)
+
+Prompt:
+    "Turn this checklist for integrating code onto a robot into a poem in the style of Dante's Divine Comedy.
+    Make it one (or two) stanzas."
+ChatGPT Response: 
+    Change sensors first—record their names and IDs true,
+    Set pneumatics’ piston in rightful face, forward or back its destined place;
+    Assign each SparkMAX number through and through,
+    Then zero swerve and arm so none fall out of grace.
+
+    Next test the motors’ turning paths to see which way they yearn to roam,
+    And end with SysId’s solemn rite,
+    Where force and motion find their proper home.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    meow meow meow meoooow :3

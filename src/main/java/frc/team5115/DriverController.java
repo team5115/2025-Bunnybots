@@ -64,6 +64,27 @@ public class DriverController {
         return slowMode;
     }
 
+    /**
+     * Sensor detects lunite at deployed position -> xfer
+     *
+     * <p>holding right trigger <-> scoring mech in/out
+     *
+     * <p>back button -> vomit (hold)
+     *
+     * <p>left trigger -> scoring lock override (hold)
+     *
+     * <p>x -> xfer lunite command
+     *
+     * <p>b -> dangerous stow command
+     *
+     * <p>a -> intake command
+     *
+     * <p>y -> safe stow arm
+     *
+     * <p>pov left -> fake sensor (hold)
+     *
+     * <p>pov up -> extend actuators to deploy net pov down -> retract net actuators
+     */
     private void configureSingleMode(
             Arm arm, Outtake outtake, IntakeWheel intakeWheel, Drivetrain drivetrain, Catcher catcher) {
 
@@ -72,32 +93,36 @@ public class DriverController {
         joyDrive.rightBumper().onTrue(setSlowMode(true)).onFalse(setSlowMode(false));
         joyDrive.start().onTrue(offsetGyro(drivetrain));
 
-        arm.filterTimeElapsed()
+        arm.sensorFilter()
                 .and(() -> !outtake.isLockOverride())
+                .and(() -> arm.getPosition() == Arm.Position.DEPLOYED)
                 .onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
         joyDrive
-                .b()
-                .and(() -> !outtake.getLocked())
-                .onTrue(outtake.extend())
-                .onFalse(outtake.retract());
-        joyDrive.back().onTrue(DriveCommands.vomit(arm, intakeWheel));
-        joyDrive
                 .rightTrigger()
+                .and(() -> !outtake.getLocked())
+                .onTrue(DriveCommands.score(arm, intakeWheel, outtake))
+                .onFalse(outtake.retract());
+
+        joyDrive.back().onTrue(intakeWheel.vomit()).onFalse(intakeWheel.stop());
+
+        joyDrive
+                .leftTrigger()
                 .onTrue(outtake.setLockOverride(true))
                 .onFalse(outtake.setLockOverride(false));
 
         joyDrive.x().onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
+
+        joyDrive.b().onTrue(DriveCommands.stow(arm, intakeWheel));
 
         joyDrive.povUp().onTrue(catcher.extendNet());
         joyDrive.povDown().onTrue(catcher.retractNet());
 
         joyDrive.a().onTrue(DriveCommands.intake(arm, intakeWheel));
 
-        joyDrive.y().onTrue(DriveCommands.stow(arm, intakeWheel));
+        joyDrive.y().onTrue(DriveCommands.safeStow(arm, intakeWheel));
 
-        joyDrive.povLeft().onTrue(arm.setMSensor(true));
-        joyDrive.povRight().onFalse(arm.setMSensor(false));
+        joyDrive.povLeft().onTrue(arm.setMSensor(true)).onFalse(arm.setMSensor(false));
     }
 
     private void configureDualMode(
@@ -108,20 +133,21 @@ public class DriverController {
         joyDrive.rightBumper().onTrue(setSlowMode(true)).onFalse(setSlowMode(false));
         joyDrive.start().onTrue(offsetGyro(drivetrain));
 
-        arm.filterTimeElapsed()
+        arm.sensorFilter()
                 .and(() -> !outtake.isLockOverride())
+                .and(() -> arm.getPosition() == Arm.Position.DEPLOYED)
                 .onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
         joyManip.x().onTrue(DriveCommands.xferLunite(outtake, arm, intakeWheel));
 
         joyManip
-                .b()
+                .rightTrigger()
                 .and(() -> !outtake.getLocked())
                 .onTrue(outtake.extend())
                 .onFalse(outtake.retract());
         joyManip.back().onTrue(DriveCommands.vomit(arm, intakeWheel));
         joyManip
-                .rightTrigger()
+                .leftTrigger()
                 .onTrue(outtake.setLockOverride(true))
                 .onFalse(outtake.setLockOverride(false));
 
@@ -130,7 +156,9 @@ public class DriverController {
 
         joyManip.a().onTrue(DriveCommands.intake(arm, intakeWheel));
 
-        joyManip.y().onTrue(DriveCommands.stow(arm, intakeWheel));
+        joyManip.b().onTrue(DriveCommands.stow(arm, intakeWheel));
+
+        joyManip.y().onTrue(DriveCommands.safeStow(arm, intakeWheel));
     }
 
     public boolean joysticksConnected() {

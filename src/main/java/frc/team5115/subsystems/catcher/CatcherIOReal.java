@@ -8,7 +8,7 @@ public class CatcherIOReal implements CatcherIO {
     private PWM linearActuator2;
 
     private final double RETRACTED_POS = 0.0;
-    private final double EXTENDED_POS = 1.0; // adjust when we get the real robot
+    private final double EXTENDED_POS = 1.0; // TODO adjust when we get the real robot
 
     private boolean state;
 

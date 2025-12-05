@@ -13,7 +13,9 @@ public interface ArmIO {
         public double currentAmps = 0;
         public double appliedVolts = 0;
 
-        public boolean luniteDetected = true;
+        public boolean luniteDetected = false;
+        public boolean luniteDetected2 = false;
+        public boolean luniteDetected3 = false;
     }
 
     public default void updateInputs(ArmIOInputs inputs) {}

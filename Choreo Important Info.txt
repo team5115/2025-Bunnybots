@@ -1,0 +1,9 @@
+Choreo Constants
+Mass: 65kg
+MOI: 4.0kg^2*nm 
+NEO
+NEO Free Speed: 4400 -> increase until it doesn't work
+Torque: .6 Nm -> increase this until it doesn't wokr
+COF: keep constant 0.55 
+Drivebase Dimensions (In CAD) 
+

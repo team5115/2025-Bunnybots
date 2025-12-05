@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.team5115.Constants;
 import frc.team5115.Constants.SwerveConstants;
 import frc.team5115.subsystems.arm.Arm;
 import frc.team5115.subsystems.drive.Drivetrain;
@@ -57,8 +58,7 @@ public class DriveCommands {
                                     .getTranslation();
 
                     // Convert to ChassisSpeeds & send command
-                    // TODO maybe modify slow mode speed?
-                    final double multiplier = slowMode.getAsBoolean() ? 0.15 : 1.0;
+                    final double multiplier = slowMode.getAsBoolean() ? Constants.SLOW_MODE_SPEED : 1.0;
                     final double vx = linearVelocity.getX() * SwerveConstants.MAX_LINEAR_SPEED * multiplier;
                     final double vy = linearVelocity.getY() * SwerveConstants.MAX_LINEAR_SPEED * multiplier;
                     omega *= SwerveConstants.MAX_ANGULAR_SPEED * multiplier;
@@ -73,22 +73,35 @@ public class DriveCommands {
 
     public static Command xferLunite(Outtake outtake, Arm arm, IntakeWheel intakeWheel) {
         return Commands.sequence(
+                outtake.retract(),
                 outtake.setLock(true),
                 arm.stow(),
-                arm.waitForSetpoint(30),
-                intakeWheel.setSpeed(-1),
-                Commands.waitSeconds(1),
+                Commands.waitSeconds(0.5),
+                arm.waitForSetpoint(1.5),
+                intakeWheel.xfer(),
+                arm.waitForSensorState(false, 1),
+                Commands.waitSeconds(0.5),
+                intakeWheel.stop(),
                 outtake.setLock(false));
     }
 
     public static Command intake(Arm arm, IntakeWheel intakeWheel) {
         return Commands.sequence(
-                arm.deploy(), intakeWheel.intake(), arm.waitForSensorState(true, Double.POSITIVE_INFINITY));
+                arm.deploy(), intakeWheel.intake(), arm.waitForSensorState(true, Double.POSITIVE_INFINITY)
+                /* ,intakeWheel.stop() */ );
+    }
+
+    public static Command score(Arm arm, IntakeWheel intakeWheel, Outtake outtake) {
+        return Commands.sequence(
+                arm.safeStow(), Commands.waitSeconds(0.3), arm.waitForBelowLock(0.5), outtake.extend());
     }
 
     public static Command vomit(Arm arm, IntakeWheel intakeWheel) {
-        return Commands.sequence(
-                arm.deploy(), arm.waitForSetpoint(Double.POSITIVE_INFINITY), intakeWheel.vomit());
+        return Commands.sequence(arm.deploy(), arm.waitForSetpoint(1), intakeWheel.vomit());
+    }
+
+    public static Command safeStow(Arm arm, IntakeWheel intakeWheel) {
+        return Commands.parallel(arm.safeStow(), intakeWheel.stop());
     }
 
     public static Command stow(Arm arm, IntakeWheel intakeWheel) {

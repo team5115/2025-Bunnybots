@@ -18,13 +18,17 @@ public class ArmIOSparkMax implements ArmIO {
     private final AbsoluteEncoder absoluteEncoder;
 
     private final DigitalInput sensor;
+    private final DigitalInput sensor2;
+    private final DigitalInput sensor3;
 
     public ArmIOSparkMax() {
         sensor = new DigitalInput(Constants.LUNITE_SENSOR);
+        sensor2 = new DigitalInput(Constants.LUNITE_SENSOR2);
+        sensor3 = new DigitalInput(Constants.LUNITE_SENSOR3);
         motor = new SparkMax(Constants.ARM_MOTOR_ID, MotorType.kBrushless);
         absoluteEncoder = motor.getAbsoluteEncoder();
         final SparkMaxConfig motorConfig = new SparkMaxConfig();
-        motorConfig.smartCurrentLimit(30, 40).idleMode(IdleMode.kCoast);
+        motorConfig.smartCurrentLimit(40, 40).idleMode(IdleMode.kCoast).inverted(true);
         motorConfig.absoluteEncoder.positionConversionFactor(360);
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
@@ -46,6 +50,8 @@ public class ArmIOSparkMax implements ArmIO {
         inputs.armAngle = Rotation2d.fromDegrees(absoluteEncoder.getPosition());
         inputs.currentAmps = motor.getOutputCurrent();
         inputs.appliedVolts = motor.getAppliedOutput() * motor.getBusVoltage();
-        inputs.luniteDetected = sensor.get();
+        inputs.luniteDetected = !sensor.get();
+        inputs.luniteDetected2 = !sensor2.get();
+        inputs.luniteDetected3 = !sensor3.get();
     }
 }

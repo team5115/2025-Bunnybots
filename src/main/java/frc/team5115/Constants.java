@@ -29,28 +29,32 @@ public final class Constants {
 
     public static final boolean SINGLE_MODE = true;
 
+    public static final double SLOW_MODE_SPEED = 0.2;
+
     public static final byte PNEUMATIC_HUB_ID = 2;
-    public static final byte OUTTAKE_FORWARD_CHANNEL = 9;
-    public static final byte OUTTAKE_REVERSE_CHANNEL = 10;
+    public static final byte OUTTAKE_FORWARD_CHANNEL = 0;
+    public static final byte OUTTAKE_REVERSE_CHANNEL = 1;
 
     public static final byte ARM_MOTOR_ID = 11;
-    public static final double ARM_STOW_ANGLE_DEG = 75.0;
-    public static final double ARM_DEPLOY_ANGLE_DEG = 0.0;
 
     public static final byte INTAKE_MOTOR_ID = 12;
-    public static final double INTAKE_SPEED = 0.15;
+    public static final double INTAKE_SPEED = 0.35;
+    public static final double INTAKE_VOMIT_SPEED = -0.22;
+    public static final double INTAKE_XFER_SPEED = -Math.PI / 10;
 
     public static final byte NET_ACTUATOR_1_ID = 9;
     public static final byte NET_ACTUATOR_2_ID = 10;
 
-    public static final byte LUNITE_SENSOR = 0;
+    public static final byte LUNITE_SENSOR = 7;
+    public static final byte LUNITE_SENSOR2 = 8;
+    public static final byte LUNITE_SENSOR3 = 9;
 
     public static final byte LED_STRIP_PWM_ID = 0;
 
     public static final double LOOP_PERIOD_SECS = 0.02;
 
     public static final double SENSOR_FILTER_TIME =
-            0.2; // Amount of time to wait while the sensor is true before starting the xfer routine
+            0.05; // Amount of time to wait while the sensor is true before starting the xfer routine
 
     public static class SwerveConstants {
         public static final byte FRONT_LEFT_DRIVE_ID = 6;
@@ -98,10 +102,10 @@ public final class Constants {
                     new Translation2d(TRACK_WIDTH_X / -2.0, TRACK_WIDTH_Y / -2.0)
                 };
 
-        public static final Rotation2d FRONT_LEFT_ANGULAR_OFFSET = Rotation2d.fromDegrees(270);
-        public static final Rotation2d FRONT_RIGHT_ANGULAR_OFFSET = Rotation2d.fromDegrees(0);
-        public static final Rotation2d BACK_LEFT_ANGULAR_OFFSET = Rotation2d.fromDegrees(180);
-        public static final Rotation2d BACK_RIGHT_ANGULAR_OFFSET = Rotation2d.fromDegrees(90);
+        public static final Rotation2d FRONT_LEFT_ANGULAR_OFFSET = Rotation2d.fromDegrees(90);
+        public static final Rotation2d FRONT_RIGHT_ANGULAR_OFFSET = Rotation2d.fromDegrees(180);
+        public static final Rotation2d BACK_LEFT_ANGULAR_OFFSET = Rotation2d.fromDegrees(0);
+        public static final Rotation2d BACK_RIGHT_ANGULAR_OFFSET = Rotation2d.fromDegrees(270);
 
         // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear
         // 15 teeth on the bevel pinion, 13 teeth on the driving motor
