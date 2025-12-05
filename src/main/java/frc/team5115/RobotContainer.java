@@ -183,7 +183,7 @@ public class RobotContainer {
         // Register commands for pathplanner
         NamedCommands.registerCommand("intake", AutoCommands.intake(arm, intakewheel, outtake));
         NamedCommands.registerCommand("xfer", AutoCommands.xfer(arm, intakewheel, outtake));
-        NamedCommands.registerCommand("score", AutoCommands.score(arm, outtake));
+        NamedCommands.registerCommand("dispense", AutoCommands.score(arm, outtake));
 
         System.out.println("Registered Commands");
     }
