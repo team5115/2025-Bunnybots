@@ -59,9 +59,10 @@ public class DriveCommands {
 
                     // Convert to ChassisSpeeds & send command
                     final double multiplier = slowMode.getAsBoolean() ? Constants.SLOW_MODE_SPEED : 1.0;
+                    final double rotMultiplier = slowMode.getAsBoolean() ? Constants.SLOW_MODE_SPEED * 0.5 : 0.7;
                     final double vx = linearVelocity.getX() * SwerveConstants.MAX_LINEAR_SPEED * multiplier;
                     final double vy = linearVelocity.getY() * SwerveConstants.MAX_LINEAR_SPEED * multiplier;
-                    omega *= SwerveConstants.MAX_ANGULAR_SPEED * multiplier;
+                    omega *= SwerveConstants.MAX_ANGULAR_SPEED * rotMultiplier;
                     drivetrain.runVelocity(
                             robotRelative.getAsBoolean()
                                     ? new ChassisSpeeds(vx, vy, omega)
