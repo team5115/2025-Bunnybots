@@ -40,7 +40,7 @@ public final class Constants {
     public static final byte INTAKE_MOTOR_ID = 12;
     public static final double INTAKE_SPEED = 0.35;
     public static final double INTAKE_VOMIT_SPEED = -0.22;
-    public static final double INTAKE_XFER_SPEED = -Math.PI / 10;
+    public static final double INTAKE_XFER_SPEED = -0.28;
 
     public static final byte NET_ACTUATOR_1_ID = 0;
     public static final byte NET_ACTUATOR_2_ID = 1;
