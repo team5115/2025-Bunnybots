@@ -27,7 +27,7 @@ public final class Constants {
         REPLAY
     }
 
-    public static final boolean SINGLE_MODE = true;
+    public static final boolean SINGLE_MODE = false;
 
     public static final double SLOW_MODE_SPEED = 0.2;
 

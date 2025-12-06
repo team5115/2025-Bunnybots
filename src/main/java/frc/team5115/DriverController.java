@@ -83,7 +83,7 @@ public class DriverController {
      *
      * <p>pov left -> fake sensor (hold)
      *
-     * <p>pov up -> extend actuators to deploy net pov down -> retract net actuators
+     * <p>pov up -> extend actuators pov down -> retract net actuators to deploy net
      */
     private void configureSingleMode(
             Arm arm, Outtake outtake, IntakeWheel intakeWheel, Drivetrain drivetrain, Catcher catcher) {
