@@ -83,7 +83,7 @@ public class DriverController {
      *
      * <p>pov left -> fake sensor (hold)
      *
-     * <p>pov up -> extend actuators to deploy net pov down -> retract net actuators
+     * <p>pov up -> extend actuators pov down -> retract net actuators to deploy net
      */
     private void configureSingleMode(
             Arm arm, Outtake outtake, IntakeWheel intakeWheel, Drivetrain drivetrain, Catcher catcher) {
@@ -122,7 +122,7 @@ public class DriverController {
 
         joyDrive.y().onTrue(DriveCommands.safeStow(arm, intakeWheel));
 
-        joyDrive.povLeft().onTrue(arm.setMSensor(true)).onFalse(arm.setMSensor(false));
+        // joyDrive.povLeft().onTrue(arm.setMSensor(true)).onFalse(arm.setMSensor(false));
     }
 
     private void configureDualMode(
@@ -143,9 +143,9 @@ public class DriverController {
         joyManip
                 .rightTrigger()
                 .and(() -> !outtake.getLocked())
-                .onTrue(outtake.extend())
+                .onTrue(DriveCommands.score(arm, intakeWheel, outtake))
                 .onFalse(outtake.retract());
-        joyManip.back().onTrue(DriveCommands.vomit(arm, intakeWheel));
+        joyManip.back().onTrue(intakeWheel.vomit()).onFalse(intakeWheel.stop());
         joyManip
                 .leftTrigger()
                 .onTrue(outtake.setLockOverride(true))

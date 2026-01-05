@@ -59,9 +59,11 @@ public class DriveCommands {
 
                     // Convert to ChassisSpeeds & send command
                     final double multiplier = slowMode.getAsBoolean() ? Constants.SLOW_MODE_SPEED : 1.0;
+                    final double rotMultiplier =
+                            slowMode.getAsBoolean() ? Constants.SLOW_MODE_SPEED * 0.5 : 0.7;
                     final double vx = linearVelocity.getX() * SwerveConstants.MAX_LINEAR_SPEED * multiplier;
                     final double vy = linearVelocity.getY() * SwerveConstants.MAX_LINEAR_SPEED * multiplier;
-                    omega *= SwerveConstants.MAX_ANGULAR_SPEED * multiplier;
+                    omega *= SwerveConstants.MAX_ANGULAR_SPEED * rotMultiplier;
                     drivetrain.runVelocity(
                             robotRelative.getAsBoolean()
                                     ? new ChassisSpeeds(vx, vy, omega)
@@ -80,20 +82,19 @@ public class DriveCommands {
                 arm.waitForSetpoint(1.5),
                 intakeWheel.xfer(),
                 arm.waitForSensorState(false, 1),
-                Commands.waitSeconds(0.5),
+                Commands.waitSeconds(Constants.EXTRA_XFER_TIME),
                 intakeWheel.stop(),
                 outtake.setLock(false));
     }
 
     public static Command intake(Arm arm, IntakeWheel intakeWheel) {
         return Commands.sequence(
-                arm.deploy(), intakeWheel.intake(), arm.waitForSensorState(true, Double.POSITIVE_INFINITY)
-                /* ,intakeWheel.stop() */ );
+                arm.deploy(), intakeWheel.intake(), arm.waitForSensorState(true, Double.POSITIVE_INFINITY));
     }
 
     public static Command score(Arm arm, IntakeWheel intakeWheel, Outtake outtake) {
         return Commands.sequence(
-                arm.safeStow(), Commands.waitSeconds(0.3), arm.waitForBelowLock(0.5), outtake.extend());
+                arm.safeStow(), Commands.waitSeconds(0.3), arm.waitForSafeToOuttake(0.5), outtake.extend());
     }
 
     public static Command vomit(Arm arm, IntakeWheel intakeWheel) {
