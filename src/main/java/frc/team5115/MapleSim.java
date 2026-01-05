@@ -1,11 +1,14 @@
 package frc.team5115;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.KilogramSquareMeters;
+import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import frc.team5115.Constants.SwerveConstants;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.GyroSimulation;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -47,11 +50,12 @@ public class MapleSim {
                                 12, // Steer motor gear ratio.
                                 Volts.of(0.1), // Drive friction voltage.
                                 Volts.of(0.1), // Steer friction voltage
-                                Inches.of(2), // Wheel radius
-                                KilogramSquareMeters.of(0.03), // Steer MOI
+                                Inches.of(3), // Wheel radius
+                                KilogramSquareMeters.of(0.1), // Steer MOI
                                 1.2)) // Wheel COF
                 // Configures the track length and track width (spacing between swerve modules)
-                .withTrackLengthTrackWidth(Inches.of(24), Inches.of(24))
+                .withTrackLengthTrackWidth(
+                        Inches.of(SwerveConstants.TRACK_WIDTH_X), Inches.of(SwerveConstants.TRACK_WIDTH_Y))
                 // Configures the bumper size (dimensions of the robot bumper)
                 .withBumperSize(Inches.of(30), Inches.of(30)); // TODO: correct numbers
     }
