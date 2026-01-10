@@ -26,10 +26,6 @@ public class DriverController {
         return Commands.runOnce(() -> drivetrain.offsetGyro(), drivetrain).ignoringDisable(true);
     }
 
-    public boolean isConnected() {
-        return joyDrive.isConnected() && (joyManip == null || joyManip.isConnected());
-    }
-
     public void configureButtonBindings(
             Arm arm, Outtake outtake, IntakeWheel intakeWheel, Drivetrain drivetrain, Catcher catcher) {
         // drive control

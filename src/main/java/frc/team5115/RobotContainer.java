@@ -19,6 +19,7 @@ import frc.team5115.subsystems.catcher.CatcherIOSim;
 import frc.team5115.subsystems.drive.Drivetrain;
 import frc.team5115.subsystems.drive.GyroIO;
 import frc.team5115.subsystems.drive.GyroIONavx;
+import frc.team5115.subsystems.drive.GyroIOSim;
 import frc.team5115.subsystems.drive.ModuleIO;
 import frc.team5115.subsystems.drive.ModuleIOSim;
 import frc.team5115.subsystems.drive.ModuleIOSparkMax;
@@ -72,7 +73,8 @@ public class RobotContainer {
                                 new ModuleIOSparkMax(0),
                                 new ModuleIOSparkMax(1),
                                 new ModuleIOSparkMax(2),
-                                new ModuleIOSparkMax(3));
+                                new ModuleIOSparkMax(3),
+                                (pose) -> {});
                 outtake = new Outtake(new OuttakeIOReal(hub));
                 arm = new Arm(new ArmIOSparkMax());
                 intakeWheel = new IntakeWheel(new IntakeWheelIOSparkMax());
@@ -80,10 +82,19 @@ public class RobotContainer {
                 break;
             case SIM:
                 // Sim robot, instantiate physics sim IO implementations
-                gyro = new GyroIO() {};
+                MapleSim.getInstance();
+                MapleSim.setupArena();
+                MapleSim.initInstance();
+                var swerveSim = MapleSim.getSwerveSim();
+                gyro = new GyroIOSim(swerveSim.getGyroSimulation());
                 drivetrain =
                         new Drivetrain(
-                                gyro, new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
+                                gyro,
+                                new ModuleIOSim(swerveSim.getModules()[0]),
+                                new ModuleIOSim(swerveSim.getModules()[1]),
+                                new ModuleIOSim(swerveSim.getModules()[3]),
+                                new ModuleIOSim(swerveSim.getModules()[2]),
+                                swerveSim::setSimulationWorldPose);
                 outtake = new Outtake(new OuttakeIOSim());
                 arm = new Arm(new ArmIOSim());
                 intakeWheel = new IntakeWheel(new IntakeWheelIOSim());
@@ -95,7 +106,12 @@ public class RobotContainer {
                 gyro = new GyroIO() {};
                 drivetrain =
                         new Drivetrain(
-                                gyro, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
+                                gyro,
+                                new ModuleIO() {},
+                                new ModuleIO() {},
+                                new ModuleIO() {},
+                                new ModuleIO() {},
+                                (pose) -> {});
                 outtake = new Outtake(new OuttakeIO() {});
                 arm = new Arm(new ArmIO() {});
                 intakeWheel = new IntakeWheel(new IntakeWheelIO() {});
@@ -164,6 +180,8 @@ public class RobotContainer {
             faultPrintTimeout -= 1;
             Logger.recordOutput("HasFaults", hasFaults);
             Logger.recordOutput("ClearForMatch", !hasFaults);
+        } else {
+            MapleSim.simPeriodic();
         }
     }
 
